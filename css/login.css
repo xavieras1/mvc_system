@@ -1,0 +1,60 @@
+body{
+	color: #fff;
+	font-family:"myriad pro";
+	font-size: 13px;
+	background-color: #f6f3fd;
+}
+#wrapper{
+	width: 940px;
+	margin: 0px auto;
+	padding: 40px 0px 0px 0px;
+}
+#left_container{
+	width: 500px;
+	background: #005597;
+	background-size: 500px 400px;
+	float: left;
+}
+#left_container span{
+	font-size: 39px;
+	font-weight: bold;
+}
+#text{
+	width: 400px;
+	height: 120px;
+	padding: 0px 50px;
+	background-color: #005597;
+	margin-top: 10px;
+}
+#right_container{
+	height: 600px;
+	float: left;
+	padding: 0px 0px 0px 100px;
+}
+#right_container img{
+	margin: 40px 0px;
+	display: block;
+}
+input[type=text], input[type=password]{
+	width: 302px;
+	height: 1.571em;
+	margin: 0px 0px 8px 0px;
+	padding: 4px 8px;
+	border: 1px solid rgb(186,186,186);
+	background-color: rgba(255,255,255,0.8);
+}
+input[type=submit]{
+	margin: 57px 0px 0px 0px;
+	background-color: #005597;
+	color: #fff;
+	height: 2.142em;
+	min-width: 6em;
+	padding: 3px 12px 5px;
+	border: 0px;
+}
+input[type=submit]:hover{
+	background-color: #009EE3;
+}
+input[type=submit]:active, input[type=submit]:hover:active{
+	background-color: #212121;
+}
