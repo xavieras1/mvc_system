@@ -19,7 +19,7 @@ var nivel;
 function editar(boton) {
   var current=$('.active').attr('href').substring(1);
 
-  if(current==="permisos"){    
+  if(current==="permisos"){
     id_perm=(boton.parent().parent().attr("class").substring(boton.parent().parent().attr("class").indexOf(" ")+1+current.length));
     nivel=(boton.parent().parent().children(":nth-child(4)").text());
     $(".agregar").hide();
@@ -40,6 +40,8 @@ function editar(boton) {
     var clase=boton.attr("class");
     var botonid=clase.substring(10,16);
     set_table_editar(current,botonid,nivel);
+    //$("#main").load("editar_permiso.php");
+    //window.location.href = "http://stackoverflow.com";//la intencion es llamar a una nueva pagina para editar un permiso
   }else if(current==="tipos_instancia"){
     //table+='<td><input name="logo" type="file"></td>';
       $(".agregar").hide();
@@ -57,7 +59,7 @@ function editar(boton) {
   $(".agregar").attr("disabled", "disabled");
   $('input.guardar').click(function(){
     //$(".agregar").show();
-    guardar($(this));
+    guardar($(this),"");
   });
 
   $('input.cancelar').click(function(){ //cancelar del editar
@@ -66,11 +68,11 @@ function editar(boton) {
     }
     $('#main_table tbody').empty();
     set_table(current);
-  $(".agregar").removeAttr("disabled"); 
+  $(".agregar").removeAttr("disabled");
    });
      
 }
-function guardar(boton) {
+function guardar(boton,additional) {
   var current=$('.active').attr('href').substring(1);
   var id="";
 
@@ -103,6 +105,29 @@ function guardar(boton) {
     url+="&permisos="+permisos;
     //$("#main").load("./index.php");
     //window.location.href = "http://stackoverflow.com";//la intencion es llamar a una nueva pagina para editar un permiso
+  }else if(current==="nucleo"){
+     if(additional)
+       url="includes/api.php?request=guardar&tipo="+additional+"&id="+id;
+ 
+     url+="&"+"foto="+boton.parent().children("input,select").filter("[name='foto']").val();
+     url+="&"+"nombre="+boton.parent().children("input,select").filter("[name='nombre']").val();
+     url+="&"+"apellido="+boton.parent().children("input,select").filter("[name='apellido']").val();
+     url+="&"+"ciudad="+boton.parent().children("input,select").filter("[name='ciudad']").val();
+     url+="&"+"sexo="+boton.parent().children("input,select").filter("[name='sexo']").val();
+     url+="&"+"edad="+boton.parent().children("input,select").filter("[name='edad']").val();
+     url+="&"+"nacimiento="+boton.parent().children("input,select").filter("[name='date']").val();
+     url+="&"+"domicilio="+boton.parent().children("input,select").filter("[name='address']").val();
+     url+="&"+"estudio="+boton.parent().children("input,select").filter("[name='estudio']").val();
+     url+="&"+"institucion="+boton.parent().children("input,select").filter("[name='institucion']").val();
+     url+="&"+"telefono="+boton.parent().children("input,select").filter("[name='home']").val();
+     url+="&"+"claro="+boton.parent().children("input,select").filter("[name='claro']").val();
+     url+="&"+"movi="+boton.parent().children("input,select").filter("[name='movi']").val();
+     url+="&"+"pin="+boton.parent().children("input,select").filter("[name='pin']").val();
+     url+="&"+"email="+boton.parent().children("input,select").filter("[name='email']").val();
+     url+="&"+"fb="+boton.parent().children("input,select").filter("[name='fb']").val();
+     url+="&"+"tw="+boton.parent().children("input,select").filter("[name='tw']").val();
+     url+="&"+"user="+boton.parent().children("input,select").filter("[name='user']").val();
+     url+="&"+"pass="+boton.parent().children("input,select").filter("[name='pass']").val();
   }else if(current==="tipos_instancia"){
     //table+='<td><input name="logo" type="file"></td>';}
     url+="&"+boton.parent().parent().children(":nth-child(1)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(1)").children("input").val();
@@ -160,6 +185,10 @@ function guardar(boton) {
         nuevo['clasificacion']=clasificacion;
         nuevo['nombre']=nombre;
         nuevo['descripcion']=descripcion;
+
+      }else if(current==="nucleo"){
+       if(additional)
+          alert("hols");
 
       }else{
         var nombre=boton.parent().parent().children(":nth-child(1)").children("input").val();
@@ -281,6 +310,23 @@ $(document).ready(function(){
       table+='<td><input placeholder="NOMBRE" name="nombre" type="text"></td>';
       table+='<td><input placeholder="DESCRIPCI&Oacute;N" name="descripcion" type="textarea"></td>';
       table+='<td><input type="button" value="GUARDAR" class="guardar"><br/><input type="button" value="CANCELAR" class="cancelar"></td></tr>';
+     }else if(current==="nucleo"){
+       table+='<td><select id="selPersona" name="nombre"><option value="">ELEGIR PERSONA</option>';
+       for(var o=0;o<data.data[current]['info']['personas'].length;o++){
+         table+='<option value="'+data.data[current]['info']['personas'][o].id+'">'+data.data[current]['info']['personas'][o].nombre+" "+data.data[current]['info']['personas'][o].apellido+'</option>';
+       }
+       table+='<option value="new">Agregar Persona...</option>'+
+       '</select></td>';
+       table+='<td><select name="nombre"><option value="">ELEGIR CARGO</option>'+
+       '<option value="">ENCARGADO GENERAL</option>'+
+       '<option value="">ENCARGADO DE INSTRUCCIÓN</option>'+
+       '<option value="">ENCARGADO DE ESPIRITUALIDAD</option>'+
+       '<option value="">ENCARGADO DE APOSTOLADO</option>'+
+       '<option value="">ENCARGADO DE TEMPORALIDADES</option>'+
+       '<option value="">ENCARGADO DE COMUNICACIONES</option>'+
+       '</select></td>';
+       table+='<td><input name="fecha" type="date"></td>';
+       //table+='<td><input placeholder="DESCRIPCIÓN" name="descripcion" type="textarea"></td>';  
     }else{
       table+='<td><input placeholder="NOMBRE" name="nombre" type="text"></td>';
       table+='<td><input placeholder="DESCRIPCI&Oacute;N" name="descripcion" type="textarea"></td>';
@@ -292,21 +338,34 @@ $(document).ready(function(){
     $('#main_table tbody').append(table);
     $(".agregar").attr("disabled", "disabled");
     $('input.guardar').click(function(){
-    guardar($(this));
+    guardar($(this),"");
     });
     $('input.nuevo_permiso').click(function(){
-    guardar($(this));
+      guardar($(this),"");
     });
     $('input.cancelar').click(function(){
       $('#main_table tbody tr:last-child').remove();
       $(".agregar").removeAttr("disabled");
       $(".agregar").show();
     });
+    $("#selPersona").change(function(){
+       if($(this).find(":selected").val()=="new"){
+         $('.background').show();
+         $('input[name="date"]').change(function(){
+           $('input[name="edad"]').val(getAge($(this).val()));
+         });
+         $('.cerrar').click(function(){
+           $('.background').hide();
+        });
+         $('.guardarPersona').click(function(){
+           guardar($(this),"persona");
+         });
+       }
+    });
     $('input.cancel').click(function(){
       $('#main_table tbody').empty();
       set_table(current); 
       $('#content_title').text("PERMISOS"); 
-      });
-  });
-  
+    });
+  });  
 });

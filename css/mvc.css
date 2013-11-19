@@ -182,7 +182,7 @@ ul.roles li a {
 	margin-top: 25px;
 }
 /*BUTTON*/
-input[type="button"].agregar{
+input[type="button"].agregar,input[type="button"].cerrar{
 	float: right;
 	margin-right: 7px;
 	margin-top: -2px;
@@ -414,3 +414,23 @@ height: 120px;
 	position: fixed;
 	bottom: 0;
 }
+
+/**************************************FormPersona*******************************************/
+ #formPersona{
+   border: 1px solid #005597;
+   box-shadow: 5px 5px 5px #1A1A1A;
+   background-color: #fff;
+   width: 60%;
+   margin: 0 auto;
+ }
+ .background{
+   display: none;
+   position: absolute;
+   top: 0;
+   padding-top: 2%;
+   margin: 0 auto;
+   width: 100%;
+   z-index: 10;
+   background: rgba(0, 0, 0, 0.46);
+   height: 125%;
+ }
