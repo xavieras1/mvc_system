@@ -11,23 +11,23 @@
     <script type="text/javascript" language="javascript1.5" src="js/jquery-2.0.3.min.js"></script>
     <script type="text/javascript" language="javascript1.5" src="js/mvc.js"></script>
     <link rel='stylesheet' href='css/mvc.css' />
-    <?php include 'includes/php_js.php';?>
+    <?php include '/includes/php_js.php';?>
   </head>
   <body>
     <div id="header">
-      <?php include 'includes/header.php';?>
+      <?php include '/includes/header.php';?>
     </div>
     <div id="wrapper">
       <div id="menu_bar">
         <?php 
           if ($_SESSION["current_cargo"]['info']['nivel']==1) {
-            include 'includes/menu_sa.php';
+            include '/includes/menu_sa.php';
           }elseif ($_SESSION["current_cargo"]['info']['nivel']==2) {
-            include 'includes/menu_nucleo.php';
+            include '/includes/menu_nucleo.php';
           }elseif ($_SESSION["current_cargo"]['info']['nivel']==3) {
-            include 'includes/menu_centro.php';
+            include '/includes/menu_centro.php';
           }else{
-            include 'includes/menu_a.php';
+            include '/includes/menu_a.php';
           }
         ?>
       </div>
@@ -49,6 +49,5 @@
       <span>MOVIMIENTO DE VIDA CRISTIANA ECUADOR</span></br>
       <span>(C) SAC 2013</span></br>
     </div>
-    <?php include 'includes/formPersona.php';?>
   </body>
 </html>
