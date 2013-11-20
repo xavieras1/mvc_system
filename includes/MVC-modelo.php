@@ -47,7 +47,7 @@ class modelo
 						'permisos'=>array(
 							'info'=>array('cargos'=>$this->DBC('SELECT * FROM cargo ORDER BY nombre ASC ',0),
 										  'areas'=>$this->DBC('SELECT * FROM area ORDER BY nombre ASC ',0),
-										  'tipos'=>$this->DBC('SELECT * FROM tipo_instancia ORDER BY nombre ASC ',0)),
+										  'tipos'=>$this->DBC('SELECT * FROM tipo_instancia ORDER BY id ASC ',0)),
 							'data'=>$this->getPermisos()),
 						'nucleo'=>array(
 							'info'=>array('personas'=>$this->DBC('SELECT * FROM persona ORDER BY nombre ASC ',0)),
@@ -160,10 +160,10 @@ class modelo
 	}
 	private function getPermisos(){
 		$permisos_orden= array();
-		$permisos = $this->DBC('SELECT * FROM permisos',0);
+		$permisos = $this->DBC('SELECT * FROM permisos ORDER BY id_tipo_instancia ASC',0);
 		for ($i=0; $i < count($permisos); $i++) { 		
 			if(count($permisos_orden)==0){
-				$tmp=array('id'=>$permisos[$i]['cargo_id'].$permisos[$i]['area_id'].$permisos[$i]['tipo_instancia_id'],'cargo_id'=>$permisos[$i]['cargo_id'],'area_id'=>$permisos[$i]['area_id'],'tipo_instancia_id'=>$permisos[$i]['tipo_instancia_id']);
+				$tmp=array('id'=>$permisos[$i]['cargo_id']."-".$permisos[$i]['area_id']."-".$permisos[$i]['tipo_instancia_id'], 'cargo_id'=>$permisos[$i]['cargo_id'],'area_id'=>$permisos[$i]['area_id'], 'tipo_instancia_id'=>$permisos[$i]['tipo_instancia_id']);
 				if($permisos[$i]['id_tipo_instancia']==0)
 					//$tmp['tipo_menu']=$permiso['tipo_menu'];
 					$tmp['nivel']=$permisos[$i]['nivel'];
@@ -172,19 +172,19 @@ class modelo
 				array_push($permisos_orden,$tmp);
 			}else{
 				$done=0;
-				for($i=0;$i<count($permisos_orden);$i++){
-					if($permisos_orden[$i]['id']==$permisos[$i]['cargo_id'].$permisos[$i]['area_id'].$permisos[$i]['tipo_instancia_id']){
+				for($j=0;$j<count($permisos_orden);$j++){
+					if($permisos_orden[$j]['id']==$permisos[$i]['cargo_id']."-".$permisos[$i]['area_id']."-".$permisos[$i]['tipo_instancia_id']){
 						if($permisos[$i]['id_tipo_instancia']==0)
 							//$permisos[$i]['tipo_menu']=$permiso['tipo_menu'];
-							$permisos_orden[$i]['nivel']=$permisos[$i]['nivel'];
+							$permisos_orden[$j]['nivel']=$permisos[$i]['nivel'];
 						else{
-							$permisos_orden[$i]['permisos'][]=array('permiso'=>$permisos[$i]['permiso'],'tipo'=>$permisos[$i]['id_tipo_instancia']);
+							$permisos_orden[$j]['permisos'][]=array('permiso'=>$permisos[$i]['permiso'],'tipo'=>$permisos[$i]['id_tipo_instancia']);
 						}
 						$done=1;
 					}
 				}
 				if($done==0){
-					$tmp=array('id'=>$permisos[$i]['cargo_id'].$permisos[$i]['area_id'].$permisos[$i]['tipo_instancia_id'],'cargo_id'=>$permisos[$i]['cargo_id'],'area_id'=>$permisos[$i]['area_id'],'tipo_instancia_id'=>$permisos[$i]['tipo_instancia_id']);
+					$tmp=array('id'=>$permisos[$i]['cargo_id']."-".$permisos[$i]['area_id']."-".$permisos[$i]['tipo_instancia_id'],'cargo_id'=>$permisos[$i]['cargo_id'],'area_id'=>$permisos[$i]['area_id'],'tipo_instancia_id'=>$permisos[$i]['tipo_instancia_id']);
 					if($permisos[$i]['id_tipo_instancia']==0)
 						$tmp['nivel']=$permisos[$i]['nivel'];
 					else
@@ -204,33 +204,44 @@ class modelo
 				 	$ids= explode(',',$parametros["ids"]);
 				 	$permisos = explode(',',$parametros["permisos"]);	
 				}
+				$band=0;
 			 	for ($i=0; $i<count($permisos); $i++){
-			 		if($rowinfo = $this->DBC('SELECT * FROM permisos WHERE cargo_id='.$cargoid.' AND area_id='.$areaid.' AND tipo_instancia_id='.$tipo_instanciaid.' AND id_tipo_instancia='.$ids[$i].' AND id_tipo_instancia!=0' ,0)){
-						$this->DBC('UPDATE permisos SET cargo_id='.$cargoid.', area_id='.$areaid.', tipo_instancia_id='.$tipo_instanciaid.' , permiso=\''.$permisos[$i].'\', id_tipo_instancia='.$ids[$i].',  nivel='.$parametros["nivel"].' WHERE cargo_id='.$cargoid.' AND area_id='.$areaid.' AND tipo_instancia_id='.$tipo_instanciaid.' AND id_tipo_instancia='.$ids[$i],1);
+			 		if($rowinfo = $this->DBC('SELECT * FROM permisos WHERE cargo_id='.$cargoid.' AND area_id='.$areaid.' AND tipo_instancia_id='.$tipo_instanciaid.' AND id_tipo_instancia='.$ids[$i],0)){
+			 			if($parametros["id_tipo_instancia"]==0){
+			 				$this->DBC('UPDATE permisos SET cargo_id='.$cargoid.', area_id='.$areaid.', tipo_instancia_id='.$tipo_instanciaid.',  nivel='.$parametros["nivel"].' WHERE cargo_id='.$cargoid.' AND area_id='.$areaid.' AND tipo_instancia_id='.$tipo_instanciaid,1);	
+			 			}else{
+			 				$this->DBC('UPDATE permisos SET cargo_id='.$cargoid.', area_id='.$areaid.', tipo_instancia_id='.$tipo_instanciaid.' , permiso=\''.$permisos[$i].'\', id_tipo_instancia='.$ids[$i].',  nivel='.$parametros["nivel"].' WHERE cargo_id='.$cargoid.' AND area_id='.$areaid.' AND tipo_instancia_id='.$tipo_instanciaid.' AND id_tipo_instancia='.$ids[$i],1);	
+			 			}
+						
 			 		}else{
-			 			$this->DBC('INSERT INTO permisos SET cargo_id='.$cargoid.' , area_id='.$areaid.' , tipo_instancia_id='.$tipo_instanciaid.' , permiso=\''.$permisos[$i].'\' , id_tipo_instancia='.$ids[$i].' ,  nivel='.$parametros["nivel"],1);				  	 	
+			 			if($band==0&&$parametros["nivel"]){
+			 				$this->DBC('INSERT INTO permisos SET cargo_id='.$cargoid.' , area_id='.$areaid.' , tipo_instancia_id='.$tipo_instanciaid.' , permiso="" ,nivel='.$parametros["nivel"],1);
+			 				$band=1;
+			 			}
+			 			$this->DBC('INSERT INTO permisos SET cargo_id='.$cargoid.' , area_id='.$areaid.' , tipo_instancia_id='.$tipo_instanciaid.' , permiso=\''.$permisos[$i].'\' , id_tipo_instancia='.$ids[$i].' ,  nivel='.$parametros["nivel"],1);
 			 		}
 				}
 				return array('error'=>0, 'descriptionerror'=>'dberror: '.mysql_error());
+
 				break;
 			case 'persona':
-				if($parametros["id"])
-					return $this->DBC('UPDATE persona SET foto=\''.$parametros["foto"].'\' , nombre=\''.$parametros["nombre"].'\', apellido=\''.$parametros["apellido"].'\' , ciudad=\''.$parametros["ciudad"].'\' , sexo=\''.$parametros["sexo"].'\', edad=\''.$parametros["edad"].'\' , nacimiento=\''.$parametros["nacimiento"].'\' , domicilio=\''.$parametros["domicilio"].'\', estudio=\''.$parametros["estudio"].'\' , institucion=\''.$parametros["institucion"].'\' , telefono=\''.$parametros["telefono"].'\', claro=\''.$parametros["claro"].'\' , movi=\''.$parametros["movi"].'\' , pin=\''.$parametros["pin"].'\', email=\''.$parametros["email"].'\' , fb=\''.$parametros["fb"].'\' , tw=\''.$parametros["tw"].'\', user=\''.$parametros["user"].'\' , pass=\''.$parametros["pass"].'\' WHERE id='.$parametros["id"],1);
-				else				
-					return $this->DBC('INSERT INTO persona SET foto=\''.$parametros["foto"].'\' , nombre=\''.$parametros["nombre"].'\', apellido=\''.$parametros["apellido"].'\' , ciudad=\''.$parametros["ciudad"].'\' , sexo=\''.$parametros["sexo"].'\', edad=\''.$parametros["edad"].'\' , nacimiento=\''.$parametros["nacimiento"].'\' , domicilio=\''.$parametros["domicilio"].'\', estudio=\''.$parametros["estudio"].'\' , institucion=\''.$parametros["institucion"].'\' , telefono=\''.$parametros["telefono"].'\', claro=\''.$parametros["claro"].'\' , movi=\''.$parametros["movi"].'\' , pin=\''.$parametros["pin"].'\', email=\''.$parametros["email"].'\' , fb=\''.$parametros["fb"].'\' , tw=\''.$parametros["tw"].'\', user=\''.$parametros["user"].'\' , pass=\''.$parametros["pass"].'\'',1);
-				break;
+		        if($parametros["id"])
+		           return $this->DBC('UPDATE persona SET foto=\''.$parametros["foto"].'\' , nombre=\''.$parametros["nombre"].'\', apellido=\''.$parametros["apellido"].'\' , ciudad=\''.$parametros["ciudad"].'\' , sexo=\''.$parametros["sexo"].'\', edad=\''.$parametros["edad"].'\' , nacimiento=\''.$parametros["nacimiento"].'\' , domicilio=\''.$parametros["domicilio"].'\', estudio=\''.$parametros["estudio"].'\' , institucion=\''.$parametros["institucion"].'\' , telefono=\''.$parametros["telefono"].'\', claro=\''.$parametros["claro"].'\' , movi=\''.$parametros["movi"].'\' , pin=\''.$parametros["pin"].'\', email=\''.$parametros["email"].'\' , fb=\''.$parametros["fb"].'\' , tw=\''.$parametros["tw"].'\', user=\''.$parametros["user"].'\' , pass=\''.$parametros["pass"].'\' WHERE id='.$parametros["id"],1);
+		         else        
+		           return $this->DBC('INSERT INTO persona SET foto=\''.$parametros["foto"].'\' , nombre=\''.$parametros["nombre"].'\', apellido=\''.$parametros["apellido"].'\' , ciudad=\''.$parametros["ciudad"].'\' , sexo=\''.$parametros["sexo"].'\', edad=\''.$parametros["edad"].'\' , nacimiento=\''.$parametros["nacimiento"].'\' , domicilio=\''.$parametros["domicilio"].'\', estudio=\''.$parametros["estudio"].'\' , institucion=\''.$parametros["institucion"].'\' , telefono=\''.$parametros["telefono"].'\', claro=\''.$parametros["claro"].'\' , movi=\''.$parametros["movi"].'\' , pin=\''.$parametros["pin"].'\', email=\''.$parametros["email"].'\' , fb=\''.$parametros["fb"].'\' , tw=\''.$parametros["tw"].'\', user=\''.$parametros["user"].'\' , pass=\''.$parametros["pass"].'\'',1);
+		     	break;
 			case 'tipos_instancia':
 				if ($parametros["id"])
 					return $this->DBC('UPDATE tipo_instancia SET logo=\''.$parametros["logo"].'\' , clasificacion=\''.$parametros["clasificacion"].'\' , nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\' WHERE id='.$parametros["id"],1);
 				else				
-					return $this->DBC('INSERT INTO tipo_instancia SET logo=\''.$parametros["logo"].'\' , clasificacion=\''.$parametros["clasificacion"].'\' , nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\'',1);
+					return $this->DBC('INSERT INTO tipo_instancia SET logo=\''.$parametros["logo"].'\' , clasificacion=\''.$parametros["clasificacion"].'\', 
+					nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\'',1);
 				break;
 			default:
 				if ($parametros["id"])
 					return $this->DBC('UPDATE '.$tipo.' SET nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\' WHERE id='.$parametros["id"],1);
 				else
-					return $this->DBC('INSERT INTO '.$tipo.' SET nombre=\''.$parametros["nombre"].'\' , '.
-					'descripcion=\''.$parametros["descripcion"].'\'',1);
+					return $this->DBC('INSERT INTO tipo_instancia SET logo=\''.$parametros["logo"].'\' , clasificacion=\''.$parametros["clasificacion"].'\' , nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\'',1);
 				break;
 		}
 	}

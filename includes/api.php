@@ -5,7 +5,7 @@ include('MVC-modelo.php');
 if (isset($_REQUEST['request'])) {
 	$modelo = new modelo();
 
-	$lnk = mysql_connect('localhost', 'root', 'root')
+	$lnk = mysql_connect('localhost', 'root', '')
 	or die (
 		print json_encode( array('error'=>102,'descriptionerror'=>'dberror: NO Se pudo '.
 			'conectar al servidor de DB-> '. mysql_error()))

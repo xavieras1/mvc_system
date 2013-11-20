@@ -162,8 +162,24 @@ ul.roles li a {
 	text-align: center;
 	padding-top: 7px;
 }
-#content_header select{
-	margin: 6px 16px;
+#select_levels, .select_cargo, .select_area, .select_tipo, .select_nivel, .tipo_instancia{
+	font-size: 11px;
+	margin-top: 0px;
+}
+.div_niveles{
+	float: left;
+	margin-top: -1px;
+	margin-left: 8px;
+}
+#main{
+	border: 1px solid #005597;
+	box-shadow: 5px 5px 5px #1A1A1A;
+	float: left;
+	width: 80%;
+	min-height: 450px;
+	background-color: #fff;
+	margin-left: 25px;
+	margin-top: 25px;
 }
 /*BUTTON*/
 input[type="button"].agregar,input[type="button"].cerrar{
@@ -253,79 +269,9 @@ th, td{
 	padding-left: 10px;
 }
 
-.table_aso_row td, .table_acti_row td, .table_row td{
+.table_perm td, .table_row td{
 	height: 30px;
 }
-.table_title_aso th:nth-child(1), .table_aso_row td:nth-child(1){
-	width: 190px;
-}
-.table_title_aso th:nth-child(2), .table_aso_row td:nth-child(2){
-	width: 190px;
-}
-.table_title_aso th:nth-child(3), .table_aso_row td:nth-child(3){
-	width: 220px;
-}
-.table_title_aso th:nth-child(4), .table_aso_row td:nth-child(4){
-	width: 190px;
-}
-.table_title_aso th:nth-child(5), .table_aso_row td:nth-child(5){
-	width: 180px;
-	text-align: left;
-}
-.table_rec_row th:nth-child(1), .table_rec_row td:nth-child(1){
-	width: 22px;
-}
-.table_rec_row th:nth-child(2), .table_rec_row td:nth-child(2){
-	width: 25px;
-}
-.table_rec_row th:nth-child(3), .table_rec_row td:nth-child(3){
-	width: 56px;
-}
-.table_rec_row th:nth-child(4), .table_rec_row td:nth-child(4){
-	width: 17px;
-}
-
-.table_acti_row  th:nth-child(1), .table_acti_row  td:nth-child(1){
-	width: 60px;
-}
-.table_acti_row  th:nth-child(2), .table_acti_row  td:nth-child(2){
-	width: 62px;
-}
-.table_acti_row  th:nth-child(3), .table_acti_row  td:nth-child(3){
-	width: 68px;
-}
-.table_acti_row  th:nth-child(4), .table_acti_row  td:nth-child(4){
-	width: 89px;
-}
-.table_acti_row  th:nth-child(5), .table_acti_row td:nth-child(5){
-	width: 55px;
-}
-
-.table_title th:nth-child(1), .table_miembro_row td:nth-child(1){
-	width: 3px;
-}
-.table_title th:nth-child(2), .table_miembro_row td:nth-child(2){
-	width: 10px;
-}
-.table_title th:nth-child(3), .table_miembro_row td:nth-child(3){
-	width: 13px;
-}
-.table_title th:nth-child(4), .table_miembro_row td:nth-child(4){
-	width: 13px;
-}
-.table_title th:nth-child(5), .table_miembro_row td:nth-child(5){
-	width: 12px;
-}
-.table_title th:nth-child(6), .table_miembro_row td:nth-child(6){
-	width: 5px;
-}
-.table_title th:nth-child(7), .table_miembro_row td:nth-child(7){
-	width: 70px;
-}
-.table_title th:nth-child(8), .table_miembro_row td:nth-child(8){
-	width: 100px;
-}
-
 .celda {
 height: 120px;
 }
@@ -350,7 +296,7 @@ height: 120px;
 	margin-right: 22px;
 }
 
-.btneditar, .btneliminar, .cancelar, .guardar, .save_permiso{
+.btneditar, .btneliminar, .cancelar, .guardar, .save_permiso, .nuevo_permiso{
 	height: 21px;
 	width: 71px;
 	font-size: 10px;
@@ -470,21 +416,21 @@ height: 120px;
 }
 
 /**************************************FormPersona*******************************************/
-#formPersona{
-	border: 1px solid #005597;
-	box-shadow: 5px 5px 5px #1A1A1A;
-	background-color: #fff;
-	width: 60%;
-	margin: 0 auto;
-}
-.background{
-	display: none;
-	position: absolute;
-	top: 0;
-	padding-top: 2%;
-	margin: 0 auto;
-	width: 100%;
-	z-index: 10;
-	background: rgba(0, 0, 0, 0.46);
-	height: 125%;
-}
+ #formPersona{
+   border: 1px solid #005597;
+   box-shadow: 5px 5px 5px #1A1A1A;
+   background-color: #fff;
+   width: 60%;
+   margin: 0 auto;
+ }
+ .background{
+   display: none;
+   position: absolute;
+   top: 0;
+   padding-top: 2%;
+   margin: 0 auto;
+   width: 100%;
+   z-index: 10;
+   background: rgba(0, 0, 0, 0.46);
+   height: 125%;
+ }
