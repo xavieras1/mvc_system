@@ -90,8 +90,7 @@ function set_table(current){
     if($data[0]){
       for(var j=0;j<$data.length;j++){
         table+='<tr id="'+current+$data[j].id+'" class="table_row '+current+$data[j].id+'">'        
-        table+='<td><form enctype="multipart/form-data" action="/SubirLogo" method="POST">'+$data[j].logo+'</form></td>';
-        console.log($data[j].logo);
+        table+='<td><img src="img/sinfoto.jpg" style="width:100px;height:100px;">'+$data[j].logo+'</td>';
         table+='<td>'+$data[j].clasificacion+'</td>';
         table+='<td>'+$data[j].nombre+'</td>';
         table+='<td>'+$data[j].descripcion+'</td>';
@@ -101,7 +100,6 @@ function set_table(current){
     }else{
       table+='<tr class="none"><td>NO HAY ELEMENTOS</td></tr>';
     }
-  
   }else if(current==="nucleo"){
      table+='<th>NOMBRE</th>';
      table+='<th>CARGO</th>';
