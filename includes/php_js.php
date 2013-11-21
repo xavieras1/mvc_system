@@ -89,8 +89,9 @@ function set_table(current){
     table+='<th>FUNCIONES</th></tr>';
     if($data[0]){
       for(var j=0;j<$data.length;j++){
-        table+='<tr id="'+current+$data[j].id+'" class="table_row '+current+$data[j].id+'">'
-        table+='<td>'+$data[j].logo+'</td>';
+        table+='<tr id="'+current+$data[j].id+'" class="table_row '+current+$data[j].id+'">'        
+        table+='<td><form enctype="multipart/form-data" action="/SubirLogo" method="POST">'+$data[j].logo+'</form></td>';
+        console.log($data[j].logo);
         table+='<td>'+$data[j].clasificacion+'</td>';
         table+='<td>'+$data[j].nombre+'</td>';
         table+='<td>'+$data[j].descripcion+'</td>';

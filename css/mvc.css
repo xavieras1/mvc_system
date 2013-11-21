@@ -245,6 +245,7 @@ input[type="button"]:active, input[type="button"]:hover:active{
 }
 #content{
 	overflow: auto;
+	height: 450px;
 }
 /*ASOCIACIONES*/
 table{

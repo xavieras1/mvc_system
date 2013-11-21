@@ -241,7 +241,8 @@ class modelo
 				if ($parametros["id"])
 					return $this->DBC('UPDATE '.$tipo.' SET nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\' WHERE id='.$parametros["id"],1);
 				else
-					return $this->DBC('INSERT INTO tipo_instancia SET logo=\''.$parametros["logo"].'\' , clasificacion=\''.$parametros["clasificacion"].'\' , nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\'',1);
+					return $this->DBC('INSERT INTO '.$tipo.' SET nombre=\''.$parametros["nombre"].'\' , '.
+					'descripcion=\''.$parametros["descripcion"].'\'',1);
 				break;
 		}
 	}

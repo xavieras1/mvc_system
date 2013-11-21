@@ -169,8 +169,8 @@ function guardar(boton,additional) {
         //window.location.href = "http://stackoverflow.com";//la intencion es llamar a una nueva pagina para editar un permiso
       }else if(current==="tipos_instancia"){
         //table+='<td><input name="logo" type="file"></td>';}
-        var logo=boton.parent().parent().children(":nth-child(1)").children("input").val();
-        boton.parent().parent().children(":nth-child(1)").html(logo);
+        // var logo=boton.parent().parent().children(":nth-child(1)").children("input").val();
+        // boton.parent().parent().children(":nth-child(1)").html(logo);
         var clasificacion=boton.parent().parent().children(":nth-child(2)").children("input").val();
         boton.parent().parent().children(":nth-child(2)").html(clasificacion);
         var nombre=boton.parent().parent().children(":nth-child(3)").children("input").val();
@@ -180,11 +180,16 @@ function guardar(boton,additional) {
         boton.parent().parent().attr("class","table_row "+current+json.id);
 
         var nuevo={};
-        nuevo['id']=json.id;
-        nuevo['logo']=logo;
+        nuevo['id']=json.id;       
         nuevo['clasificacion']=clasificacion;
         nuevo['nombre']=nombre;
         nuevo['descripcion']=descripcion;
+
+        var logo="<td><img src='../img/sinfoto.jpg'></td>";
+          if(foto==1){
+            logo="<td><img src='/img/logos/tipo_instancia"+json.id+".jpg'></td>";
+          }
+        nuevo['logo']=logo;
 
       }else if(current==="nucleo"){
        if(additional)
@@ -215,6 +220,28 @@ function guardar(boton,additional) {
       $(".agregar").removeAttr("disabled");
       $(".agregar").show();
     }
+  });
+  var foto=0;
+  $('.table_row:nth-last-child(1) input[name="logo"]').change(function(){
+        var data = new FormData($('input[name="logo"]'));     
+        jQuery.each($('input[name="foto"]')[0].files, function(i, file) {
+          data.append(i, file);
+        });
+        $.ajax({
+            type: 'POST',
+            data: data,
+            url: '/SubirLogo',
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(data){
+              if(data.nombre!=null){              
+                $('.table_row:nth-last-child(1) img').attr('src',".."+data.nombre);
+                foto=1;
+              }else
+                alert(data.msn);
+            }
+        });
   });
 }
 function eliminar(table,id){
