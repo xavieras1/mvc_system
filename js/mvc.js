@@ -49,6 +49,13 @@ function editar(boton) {
       boton.parent().parent().children(":nth-child(2)").html('<input name="clasificacion" type="text" value="'+boton.parent().parent().children(":nth-child(2)").text()+'">');
       boton.parent().parent().children(":nth-child(3)").html('<input name="nombre" type="text" value="'+boton.parent().parent().children(":nth-child(3)").text()+'">');
       boton.parent().parent().children(":nth-child(4)").html('<input name="descripcion" type="textarea" value="'+boton.parent().parent().children(":nth-child(4)").text()+'">');
+  }else if(current==="centros"){    
+      $(".agregar").hide();
+      boton.parent().parent().children(":nth-child(1)").html('<input name="nombre" type="text" value="'+boton.parent().parent().children(":nth-child(1)").val()+'">');
+      boton.parent().parent().children(":nth-child(2)").html('<input name="descripcion" type="textarea" value="'+boton.parent().parent().children(":nth-child(2)").text()+'">');
+      boton.parent().parent().children(":nth-child(3)").html('<input name="fecha_creacion" type="date" value="'+boton.parent().parent().children(":nth-child(3)").text()+'">');
+      boton.parent().parent().children(":nth-child(4)").html('<input name="telefono" type="text" value="'+boton.parent().parent().children(":nth-child(4)").text()+'">');
+      boton.parent().parent().children(":nth-child(5)").html('<input name="direccion" type="text" value="'+boton.parent().parent().children(":nth-child(5)").text()+'">');  
   }else{
     $(".agregar").hide();
     boton.parent().parent().children(":nth-child(1)").html('<input name="nombre" type="text" value="'+boton.parent().parent().children(":nth-child(1)").text()+'">');
@@ -134,6 +141,12 @@ function guardar(boton,additional) {
     url+="&"+boton.parent().parent().children(":nth-child(2)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(2)").children("input").val();
     url+="&"+boton.parent().parent().children(":nth-child(3)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(3)").children("input").val();
     url+="&"+boton.parent().parent().children(":nth-child(4)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(4)").children("input").val();
+  }else if(current==="centros"){
+    url+="&"+boton.parent().parent().children(":nth-child(1)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(1)").children("input").val();
+    url+="&"+boton.parent().parent().children(":nth-child(2)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(2)").children("input").val();
+    url+="&"+boton.parent().parent().children(":nth-child(3)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(3)").children("input").val();
+    url+="&"+boton.parent().parent().children(":nth-child(4)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(4)").children("input").val();
+    url+="&"+boton.parent().parent().children(":nth-child(4)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(5)").children("input").val();
   }else{
     url+="&"+boton.parent().parent().children(":nth-child(1)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(1)").children("input").val();
     url+="&"+boton.parent().parent().children(":nth-child(2)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(2)").children("input").val();
@@ -186,6 +199,26 @@ function guardar(boton,additional) {
         nuevo['nombre']=nombre;
         nuevo['descripcion']=descripcion;
 
+      }else if(current==="centros"){
+        var nombre=boton.parent().parent().children(":nth-child(1)").children("input").val();
+        boton.parent().parent().children(":nth-child(1)").html(nombre);
+        var descripcion=boton.parent().parent().children(":nth-child(2)").children("input").val();
+        boton.parent().parent().children(":nth-child(2)").html(descripcion);
+        var fecha_creacion=boton.parent().parent().children(":nth-child(3)").children("input").val();
+        boton.parent().parent().children(":nth-child(3)").html(fecha_creacion);
+        var telefono=boton.parent().parent().children(":nth-child(4)").children("input").val();
+        boton.parent().parent().children(":nth-child(4)").html(telefono);
+        var direccion=boton.parent().parent().children(":nth-child(5)").children("input").val();
+        boton.parent().parent().children(":nth-child(5)").html(direccion);
+        boton.parent().parent().attr("class","table_row "+current+json.id);
+
+        var nuevo={};
+        nuevo['id']=json.id;
+        nuevo['nombre']=nombre;
+        nuevo['descripcion']=descripcion;
+        nuevo['fecha_creacion']=fecha_creacion;
+        nuevo['telefono']=telefono;
+        nuevo['direccion']=direccion;
       }else if(current==="nucleo"){
        if(additional)
           alert("hols");
@@ -327,6 +360,13 @@ $(document).ready(function(){
        '</select></td>';
        table+='<td><input name="fecha" type="date"></td>';
        //table+='<td><input placeholder="DESCRIPCIÓN" name="descripcion" type="textarea"></td>';  
+    }else if(current==="centros"){
+      table+='<td><input placeholder="NOMBRE" name="nombre" type="text"></td>';
+      table+='<td><input placeholder="DESCRIPCIÓN" name="descripcion" type="textarea"></td>';
+      table+='<td><input placeholder="FECHA DE CREACIÓN" name="fecha_creacion" type="date"></td>';
+      table+='<td><input placeholder="TELÉFONO" name="telefono" type="text"></td>';
+      table+='<td><input placeholder="DIRECCIÓN" name="direccion" type="text"></td>';
+      table+='<td><input type="button" value="GUARDAR" class="guardar"><br/><input type="button" value="CANCELAR" class="cancelar"></td></tr>';
     }else{
       table+='<td><input placeholder="NOMBRE" name="nombre" type="text"></td>';
       table+='<td><input placeholder="DESCRIPCI&Oacute;N" name="descripcion" type="textarea"></td>';
