@@ -113,6 +113,8 @@ function guardar(boton,additional) {
     //$("#main").load("./index.php");
     //window.location.href = "http://stackoverflow.com";//la intencion es llamar a una nueva pagina para editar un permiso
   }else if(current==="nucleo"){
+
+    if (boton.attr("class")==="guardarPersona"){
      if(additional)
        url="includes/api.php?request=guardar&tipo="+additional+"&id="+id;
  
@@ -135,6 +137,11 @@ function guardar(boton,additional) {
      url+="&"+"tw="+boton.parent().children("input,select").filter("[name='tw']").val();
      url+="&"+"user="+boton.parent().children("input,select").filter("[name='user']").val();
      url+="&"+"pass="+boton.parent().children("input,select").filter("[name='pass']").val();
+    }else{
+      url+="&"+"id_persona="+boton.parent().children("input,select").filter("[name='nombre']").val();
+      url+="&"+"id_cargo="+boton.parent().children("input,select").filter("[name='cargo']").val();
+      url+="&"+"fecha_inicio="+boton.parent().children("input,select").filter("[name='date']").val();
+    } 
   }else if(current==="tipos_instancia"){
     //table+='<td><input name="logo" type="file"></td>';}
     url+="&"+boton.parent().parent().children(":nth-child(1)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(1)").children("input").val();
@@ -350,7 +357,7 @@ $(document).ready(function(){
        }
        table+='<option value="new">Agregar Persona...</option>'+
        '</select></td>';
-       table+='<td><select name="nombre"><option value="">ELEGIR CARGO</option>'+
+       table+='<td><select name="cargo"><option value="">ELEGIR CARGO</option>'+
        '<option value="">ENCARGADO GENERAL</option>'+
        '<option value="">ENCARGADO DE INSTRUCCIÓN</option>'+
        '<option value="">ENCARGADO DE ESPIRITUALIDAD</option>'+
@@ -359,6 +366,7 @@ $(document).ready(function(){
        '<option value="">ENCARGADO DE COMUNICACIONES</option>'+
        '</select></td>';
        table+='<td><input name="fecha" type="date"></td>';
+       table+='<td><input type="button" value="GUARDAR" class="guardar"><br/><input type="button" value="CANCELAR" class="cancelar"></td></tr>';
        //table+='<td><input placeholder="DESCRIPCIÓN" name="descripcion" type="textarea"></td>';  
     }else if(current==="centros"){
       table+='<td><input placeholder="NOMBRE" name="nombre" type="text"></td>';
