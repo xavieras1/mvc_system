@@ -54,6 +54,13 @@ class modelo
 							'data'=>$this->DBC('SELECT pcai.*,p.* FROM persona pe, persona_cargo_area_instancia pcai, permisos p WHERE p.nivel=2 AND p.tipo_instancia_id=pcai.tipo_instancia_id AND p.area_id=pcai.area_id AND p.cargo_id=pcai.cargo_id AND pcai.fecha_fin<NOW() ORDER BY pe.nombre ASC',0))
 						));
 				break;
+			case 2://NÚCLEO
+				$info=array_merge($cargo_persona,$this->DBC('SELECT c.nombre AS nombre_cargo, c.descripcion AS descripcion_cargo FROM cargo c WHERE c.id='.$cargo_persona['cargo_id'],0)[0]);
+				return array('info'=>$info,
+					'data'=>array(
+						'centros'=>$this->DBC('SELECT * FROM instancia_permanencia WHERE nivel=2 ORDER BY nombre ASC ',0)
+						));
+				break;
 			case 8://ANIMADOR
 				$result=mysql_query('select c.* from cargo c where c.id='.$cargo_persona['cargo_id'])
 						or die(
