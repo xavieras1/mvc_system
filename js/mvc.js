@@ -1,5 +1,5 @@
 // JavaScript Document
-//Angel Astudillo && Andrea Simbaña && Yuri Cosquillo
+//Angel Astudillo && Andrea Simbaña
 // Wait until the DOM has loaded before querying the document
 
 function getAge(dateString) {
@@ -114,10 +114,9 @@ function guardar(boton,additional) {
     //window.location.href = "http://stackoverflow.com";//la intencion es llamar a una nueva pagina para editar un permiso
   }else if(current==="nucleo"){
 
-    if (boton.attr("class")==="guardarPersona"){
-     if(additional)
+     if(additional){
        url="includes/api.php?request=guardar&tipo="+additional+"&id="+id;
- 
+      
      url+="&"+"foto="+boton.parent().children("input,select").filter("[name='foto']").val();
      url+="&"+"nombre="+boton.parent().children("input,select").filter("[name='nombre']").val();
      url+="&"+"apellido="+boton.parent().children("input,select").filter("[name='apellido']").val();
@@ -138,9 +137,10 @@ function guardar(boton,additional) {
      url+="&"+"user="+boton.parent().children("input,select").filter("[name='user']").val();
      url+="&"+"pass="+boton.parent().children("input,select").filter("[name='pass']").val();
     }else{
-      url+="&"+"id_persona="+boton.parent().children("input,select").filter("[name='nombre']").val();
-      url+="&"+"id_cargo="+boton.parent().children("input,select").filter("[name='cargo']").val();
-      url+="&"+"fecha_inicio="+boton.parent().children("input,select").filter("[name='date']").val();
+      url+="&"+"id_persona="+$('#selPersona').val();
+      url+="&"+"id_cargo="+$('#selCargo').val().substring(0,1);
+      url+="&"+"id_area="+$('#selCargo').val().substring(2,3);
+      url+="&"+"fecha_inicio="+boton.parent().parent().children(":nth-child(3)").children("input").val();
     } 
   }else if(current==="tipos_instancia"){
     //table+='<td><input name="logo" type="file"></td>';}
@@ -227,6 +227,22 @@ function guardar(boton,additional) {
         nuevo['telefono']=telefono;
         nuevo['direccion']=direccion;
       }else if(current==="nucleo"){
+        var persona_id=boton.parent().parent().children(":nth-child(1)").children("input").val();
+        boton.parent().parent().children(":nth-child(1)").html(persona_id);
+        var cargo_id=boton.parent().parent().children(":nth-child(2)").children("input").val();
+        boton.parent().parent().children(":nth-child(2)").html(cargo_id);
+        var area_id=boton.parent().parent().children(":nth-child(3)").children("input").val();
+        boton.parent().parent().children(":nth-child(3)").html(area_id);
+        var fecha_inicio=boton.parent().parent().children(":nth-child(4)").children("input").val();
+        boton.parent().parent().children(":nth-child(4)").html(fecha_inicio);
+        boton.parent().parent().attr("class","table_row "+current+json.id);
+
+        var nuevo={};
+        nuevo['id']=json.id;
+        nuevo['persona_id']=persona_id;
+        nuevo['cargo_id']=cargo_id;
+        nuevo['area_id']=area_id;
+        nuevo['fecha_inicio']=fecha_inicio;
        if(additional)
           alert("hols");
 
@@ -357,16 +373,13 @@ $(document).ready(function(){
        }
        table+='<option value="new">Agregar Persona...</option>'+
        '</select></td>';
-       table+='<td><select name="cargo"><option value="">ELEGIR CARGO</option>'+
-       '<option value="">ENCARGADO GENERAL</option>'+
-       '<option value="">ENCARGADO DE INSTRUCCIÓN</option>'+
-       '<option value="">ENCARGADO DE ESPIRITUALIDAD</option>'+
-       '<option value="">ENCARGADO DE APOSTOLADO</option>'+
-       '<option value="">ENCARGADO DE TEMPORALIDADES</option>'+
-       '<option value="">ENCARGADO DE COMUNICACIONES</option>'+
+       table+='<td><select id="selCargo" name="cargo"><option value="">ELEGIR CARGO</option>';
+        for(var a=0;a<data.data[current]['info']['areas'].length;a++){
+         table+='<option value="'+data.data[current]['info']['cargo'][0].id+"-"+data.data[current]['info']['areas'][a].id+'">'+data.data[current]['info']['cargo'][0].nombre+" "+data.data[current]['info']['areas'][a].nombre+'</option>';
+        }
        '</select></td>';
        table+='<td><input name="fecha" type="date"></td>';
-       table+='<td><input type="button" value="GUARDAR" class="guardar"><br/><input type="button" value="CANCELAR" class="cancelar"></td></tr>';
+       table+='<td><input type="button" value="GUARDAR" class="nuevo_nucleo"><br/><input type="button" value="CANCELAR" class="cancelar"></td></tr>';
        //table+='<td><input placeholder="DESCRIPCIÓN" name="descripcion" type="textarea"></td>';  
     }else if(current==="centros"){
       table+='<td><input placeholder="NOMBRE" name="nombre" type="text"></td>';
@@ -389,6 +402,9 @@ $(document).ready(function(){
     guardar($(this),"");
     });
     $('input.nuevo_permiso').click(function(){
+      guardar($(this),"");
+    });
+    $('input.nuevo_nucleo').click(function(){
       guardar($(this),"");
     });
     $('input.cancelar').click(function(){

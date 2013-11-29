@@ -50,9 +50,11 @@ class modelo
 										  'tipos'=>$this->DBC('SELECT * FROM tipo_instancia ORDER BY id ASC ',0)),
 							'data'=>$this->getPermisos()),
 						'nucleo'=>array(
-							'info'=>array('personas'=>$this->DBC('SELECT * FROM persona ORDER BY nombre ASC ',0)),
-							'data'=>$this->DBC('SELECT pcai.*,p.* FROM persona pe, persona_cargo_area_instancia pcai, permisos p WHERE p.nivel=2 AND p.tipo_instancia_id=pcai.tipo_instancia_id AND p.area_id=pcai.area_id AND p.cargo_id=pcai.cargo_id AND pcai.fecha_fin<NOW() ORDER BY pe.nombre ASC',0))
-						));
+							'info'=>array('personas'=>$this->DBC('SELECT * FROM persona ORDER BY nombre ASC ',0),
+                            'cargo'=>$this->DBC('SELECT * FROM cargo WHERE nombre="Encargado" OR nombre="ENCARGADO" OR nombre="encargado" ORDER BY nombre ASC ',0),
+                            'areas'=>$this->DBC('SELECT * FROM area ORDER BY nombre ASC ',0)),
+                			'data'=>$this->DBC('SELECT pcai.*,p.* FROM persona pe, persona_cargo_area_instancia pcai, permisos p WHERE p.nivel=2 AND p.tipo_instancia_id=pcai.tipo_instancia_id AND p.area_id=pcai.area_id AND p.cargo_id=pcai.cargo_id AND pcai.fecha_fin<NOW() || pcai.fecha_fin!=null) ORDER BY pe.nombre ASC',0))
+              		));
 				break;
 
 	     	case 2://NÚCLEO
@@ -242,15 +244,29 @@ class modelo
 				if ($parametros["id"])
 					return $this->DBC('UPDATE tipo_instancia SET logo=\''.$parametros["logo"].'\' , clasificacion=\''.$parametros["clasificacion"].'\' , nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\' WHERE id='.$parametros["id"],1);
 				else				
-					return $this->DBC('INSERT INTO tipo_instancia SET logo=\''.$parametros["logo"].'\' , clasificacion=\''.$parametros["clasificacion"].'\', 
-					nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\'',1);
+					return $this->DBC('INSERT INTO tipo_instancia SET logo=\''.$parametros["logo"].'\' , clasificacion=\''.$parametros["clasificacion"].'\', nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\'',1);
+				break;
+			// case 'nucleo'://check the two tables' fields
+			// 	if ($parametros["id"])
+			// 		return $this->DBC('UPDATE persona_cargo_area_instancia SET persona_id=\''.$parametros["id_persona"].'\' ,cargo_id=\''.$parametros["id_cargo"].'\' , area_id=\''.$parametros["id_area"].'\' , fecha_inicio=\''.$parametros["fecha_inicio"].'\' WHERE id='.$parametros["id"],1);
+			// 			$this->DBC('UPDATE permisos SET cargo_id=\''.$parametros["id_cargo"].'\' , area_id=\''.$parametros["id_area"].'\' , tipo_instancia_id="0" , permiso="" , id_tipo_instancia="0", nivel="2" WHERE id='.$parametros["id"],1);
+						
+			// 	else				
+			// 		return $this->DBC('INSERT INTO persona_cargo_area_instancia SET persona_id=\''.$parametros["id_persona"].'\' ,cargo_id=\''.$parametros["id_cargo"].'\' , area_id=\''.$parametros["id_area"].'\' , fecha_inicio=\''.$parametros["fecha_inicio"].'\'',1);
+			// 			$this->DBC('INSERT INTO permisos SET cargo_id=\''.$parametros["id_cargo"].'\' , area_id=\''.$parametros["id_area"].'\' , tipo_instancia_id="0" , permiso="" , id_tipo_instancia="0", nivel="2"',1);
+			// 	break;
+			case 'centros':
+				if ($parametros["id"])//check instancia_permanencia_id and tipo_instancia_id
+					return $this->DBC('UPDATE instancia_permanencia SET nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\' , fecha_creacion=\''.$parametros["fecha_creacion"].'\' , telefono=\''.$parametros["telefono"].'\' , direccion=\''.$parametros["direccion"].'\' WHERE id='.$parametros["id"],1);
+				else				
+					return $this->DBC('INSERT INTO instancia_permanencia SET nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\' , fecha_creacion=\''.$parametros["fecha_creacion"].'\' , telefono=\''.$parametros["telefono"].'\' , direccion=\''.$parametros["direccion"].'\'',1);
 				break;
 			default:
 				if ($parametros["id"])
 					return $this->DBC('UPDATE '.$tipo.' SET nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\' WHERE id='.$parametros["id"],1);
 				else
-					return $this->DBC('INSERT INTO tipo_instancia SET logo=\''.$parametros["logo"].'\' , clasificacion=\''.$parametros["clasificacion"].'\' , nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\'',1);
-				break;
+					return $this->DBC('INSERT INTO '.$tipo.' SET  nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\'',1);
+          		break;
 		}
 	}
 

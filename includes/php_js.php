@@ -110,7 +110,8 @@ function set_table(current){
        for(var j=0;j<$data.length;j++){
          table+='<tr id="'+current+$data[j].id+'" class="table_row '+current+$data[j].id+'">'
          table+='<td>'+$data[j].nombre+'</td>';
-         table+='<td>'+$data[j].descripcion+'</td>';
+         table+='<td>'+$data[j].cargo+'</td>';
+         table+='<td>'+$data[j].fecha_inicio+'</td>';
          table+='<td><input type="button" value="EDITAR" class="btneditar"><br/><input type="button" value="ELIMINAR" class="btneliminar" onclick="eliminar(\''+current+'\','+$data[j].id+')"></td>';
          table+='</tr>';
        }
