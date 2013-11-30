@@ -27,6 +27,11 @@
         "descripcion": "Persona responable y que dirige grupos."
       },
       {
+        "id": "22",
+        "nombre": "Encargado",
+        "descripcion": "Persona que asume un Rol"
+      },
+      {
         "id": "5",
         "nombre": "Super admin",
         "descripcion": "Cargo que se encarga de administrar el sistema"
@@ -71,6 +76,13 @@
         "nombre": "Agrupaci\u00f3n Mariana",
         "descripcion": "Grupo de j\u00f3venes, hombres o mujeres.",
         "logo": ""
+      },
+      {
+        "id": "2",
+        "clasificacion": "",
+        "nombre": "Encargado",
+        "descripcion": "Persona que asume un rol",
+        "logo": ""
       }
     ],
     "permisos": {
@@ -85,6 +97,11 @@
             "id": "6",
             "nombre": "Animador",
             "descripcion": "Persona responable y que dirige grupos."
+          },
+          {
+            "id": "22",
+            "nombre": "Encargado",
+            "descripcion": "Persona que asume un Rol"
           },
           {
             "id": "5",
@@ -131,6 +148,13 @@
             "nombre": "Agrupaci\u00f3n Mariana",
             "descripcion": "Grupo de j\u00f3venes, hombres o mujeres.",
             "logo": ""
+          },
+          {
+            "id": "2",
+            "clasificacion": "",
+            "nombre": "Encargado",
+            "descripcion": "Persona que asume un rol",
+            "logo": ""
           }
         ]
       },
@@ -141,6 +165,23 @@
           "area_id": "0",
           "tipo_instancia_id": "0",
           "nivel": "1"
+        },
+        {
+          "id": "22-1-0",
+          "cargo_id": "22",
+          "area_id": "1",
+          "tipo_instancia_id": "0",
+          "nivel": "2",
+          "permisos": [
+            {
+              "permiso": "",
+              "tipo": "1"
+            },
+            {
+              "permiso": "",
+              "tipo": "2"
+            }
+          ]
         }
       ]
     },
@@ -190,6 +231,41 @@
             "foto": null,
             "usuario": "angel",
             "contrasena": "annie"
+          },
+          {
+            "id": "3",
+            "nombre": "Annie",
+            "apellido": "Mogrovejo",
+            "ciudad": "",
+            "sexo": "",
+            "edad": "24",
+            "fecha_nacimiento": "1988-12-18",
+            "domicilio": "undefined",
+            "nivel_estudio": "",
+            "institucion": "ESPOL",
+            "telefono": "042249953",
+            "celular_claro": "",
+            "celular_movistar": "0992244376",
+            "pin": "",
+            "email": "anniemogrovejo@hotmail.com",
+            "facebook": "",
+            "twitter": "",
+            "foto": "",
+            "usuario": "annie",
+            "contrasena": "angel"
+          }
+        ],
+        "cargos": [
+          {
+            "id": "22-1-0",
+            "cargo_id": "22",
+            "area_id": "1",
+            "tipo_instancia_id": "0",
+            "permiso": "",
+            "id_tipo_instancia": "0",
+            "nivel": "2",
+            "area_nombre": "General",
+            "cargo_nombre": "Encargado"
           }
         ]
       },

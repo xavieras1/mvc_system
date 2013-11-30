@@ -51,12 +51,10 @@ class modelo
 							'data'=>$this->getPermisos()),
 						'nucleo'=>array(
 							'info'=>array('personas'=>$this->DBC('SELECT * FROM persona ORDER BY nombre ASC ',0),
-                            'cargo'=>$this->DBC('SELECT * FROM cargo WHERE nombre="Encargado" OR nombre="ENCARGADO" OR nombre="encargado" ORDER BY nombre ASC ',0),
-                            'areas'=>$this->DBC('SELECT * FROM area ORDER BY nombre ASC ',0)),
-                			'data'=>$this->DBC('SELECT pcai.*,p.* FROM persona pe, persona_cargo_area_instancia pcai, permisos p WHERE p.nivel=2 AND p.tipo_instancia_id=pcai.tipo_instancia_id AND p.area_id=pcai.area_id AND p.cargo_id=pcai.cargo_id AND pcai.fecha_fin<NOW() || pcai.fecha_fin!=null) ORDER BY pe.nombre ASC',0))
+                            'cargos'=>$this->DBC('SELECT CONCAT(CAST(p.cargo_id AS CHAR),"-" , CAST(p.area_id AS CHAR)) AS id, p.*,a.nombre AS area_nombre,c.nombre AS cargo_nombre FROM permisos p, cargo c, area a WHERE nivel=2 AND a.id=p.area_id AND c.id=p.cargo_id AND p.id_tipo_instancia=0 ORDER BY c.nombre ASC ',0)),
+                			'data'=>$this->DBC('SELECT pcai.*,p.* FROM persona pe, persona_cargo_area_instancia pcai, permisos p WHERE p.nivel=2 AND p.tipo_instancia_id=pcai.tipo_instancia_id AND p.area_id=pcai.area_id AND p.cargo_id=pcai.cargo_id AND pcai.fecha_fin<NOW() ORDER BY pe.nombre ASC',0))
               		));
 				break;
-
 	     	case 2://NÚCLEO
 		        $info=array_merge($cargo_persona,$this->DBC('SELECT c.nombre AS nombre_cargo, c.descripcion AS descripcion_cargo FROM cargo c WHERE c.id='.$cargo_persona['cargo_id'],0)[0]);
 		        return array('info'=>$info,
@@ -224,14 +222,14 @@ class modelo
 				$band=0;
 			 	for ($i=0; $i<count($permisos); $i++){
 			 		if($rowinfo = $this->DBC('SELECT * FROM permisos WHERE cargo_id='.$cargoid.' AND area_id='.$areaid.' AND tipo_instancia_id='.$tipo_instanciaid.' AND id_tipo_instancia='.$ids[$i],0)){
-			 			if($parametros["id_tipo_instancia"]==0){
+			 			if($ids[$i]!=0){
 			 				$this->DBC('UPDATE permisos SET cargo_id='.$cargoid.', area_id='.$areaid.', tipo_instancia_id='.$tipo_instanciaid.',  nivel='.$parametros["nivel"].' WHERE cargo_id='.$cargoid.' AND area_id='.$areaid.' AND tipo_instancia_id='.$tipo_instanciaid,1);	
 			 			}else{
 			 				$this->DBC('UPDATE permisos SET cargo_id='.$cargoid.', area_id='.$areaid.', tipo_instancia_id='.$tipo_instanciaid.' , permiso=\''.$permisos[$i].'\', id_tipo_instancia='.$ids[$i].',  nivel='.$parametros["nivel"].' WHERE cargo_id='.$cargoid.' AND area_id='.$areaid.' AND tipo_instancia_id='.$tipo_instanciaid.' AND id_tipo_instancia='.$ids[$i],1);	
 			 			}
 						
 			 		}else{
-			 			if($band==0&&$parametros["nivel"]){
+			 			if($band==0&&$parametros["nivel"]&&!$this->DBC('SELECT * FROM permisos WHERE cargo_id='.$cargoid.' AND area_id='.$areaid.' AND tipo_instancia_id='.$tipo_instanciaid.' AND nivel!=0',0)){
 			 				$this->DBC('INSERT INTO permisos SET cargo_id='.$cargoid.' , area_id='.$areaid.' , tipo_instancia_id='.$tipo_instanciaid.' , permiso="" ,nivel='.$parametros["nivel"],1);
 			 				$band=1;
 			 			}
@@ -253,15 +251,13 @@ class modelo
 				else				
 					return $this->DBC('INSERT INTO tipo_instancia SET logo=\''.$parametros["logo"].'\' , clasificacion=\''.$parametros["clasificacion"].'\', nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\'',1);
 				break;
-			// case 'nucleo'://check the two tables' fields
-			// 	if ($parametros["id"])
-			// 		return $this->DBC('UPDATE persona_cargo_area_instancia SET persona_id=\''.$parametros["id_persona"].'\' ,cargo_id=\''.$parametros["id_cargo"].'\' , area_id=\''.$parametros["id_area"].'\' , fecha_inicio=\''.$parametros["fecha_inicio"].'\' WHERE id='.$parametros["id"],1);
-			// 			$this->DBC('UPDATE permisos SET cargo_id=\''.$parametros["id_cargo"].'\' , area_id=\''.$parametros["id_area"].'\' , tipo_instancia_id="0" , permiso="" , id_tipo_instancia="0", nivel="2" WHERE id='.$parametros["id"],1);
+			case 'nucleo'://check the two tables' fields
+				if ($parametros["id"])
+					return $this->DBC('UPDATE persona_cargo_area_instancia SET persona_id=\''.$parametros["id_persona"].'\' ,cargo_id=\''.$parametros["id_cargo"].'\' , area_id=\''.$parametros["id_area"].'\' , fecha_inicio=\''.$parametros["fecha_inicio"].'\' WHERE id='.$parametros["id"],1);
 						
-			// 	else				
-			// 		return $this->DBC('INSERT INTO persona_cargo_area_instancia SET persona_id=\''.$parametros["id_persona"].'\' ,cargo_id=\''.$parametros["id_cargo"].'\' , area_id=\''.$parametros["id_area"].'\' , fecha_inicio=\''.$parametros["fecha_inicio"].'\'',1);
-			// 			$this->DBC('INSERT INTO permisos SET cargo_id=\''.$parametros["id_cargo"].'\' , area_id=\''.$parametros["id_area"].'\' , tipo_instancia_id="0" , permiso="" , id_tipo_instancia="0", nivel="2"',1);
-			// 	break;
+				else				
+					return $this->DBC('INSERT INTO persona_cargo_area_instancia SET persona_id=\''.$parametros["id_persona"].'\' ,cargo_id=\''.$parametros["id_cargo"].'\' , area_id=\''.$parametros["id_area"].'\' , fecha_inicio=\''.$parametros["fecha_inicio"].'\'',1);
+				break;
 			case 'centros':
 				if ($parametros["id"])//check instancia_permanencia_id and tipo_instancia_id
 					return $this->DBC('UPDATE instancia_permanencia SET nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\' , fecha_creacion=\''.$parametros["fecha_creacion"].'\' , telefono=\''.$parametros["telefono"].'\' , direccion=\''.$parametros["direccion"].'\' WHERE id='.$parametros["id"],1);
