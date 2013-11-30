@@ -1,5 +1,5 @@
 // JavaScript Document
-//Angel Astudillo && Andrea Simbaña && Yuri Cosquillo
+//Angel Astudillo && Andrea Simbaña
 // Wait until the DOM has loaded before querying the document
 
 function getAge(dateString) {
@@ -49,6 +49,13 @@ function editar(boton) {
       boton.parent().parent().children(":nth-child(2)").html('<input name="clasificacion" type="text" value="'+boton.parent().parent().children(":nth-child(2)").text()+'">');
       boton.parent().parent().children(":nth-child(3)").html('<input name="nombre" type="text" value="'+boton.parent().parent().children(":nth-child(3)").text()+'">');
       boton.parent().parent().children(":nth-child(4)").html('<input name="descripcion" type="textarea" value="'+boton.parent().parent().children(":nth-child(4)").text()+'">');
+  }else if(current==="centros"){    
+      $(".agregar").hide();
+      boton.parent().parent().children(":nth-child(1)").html('<input name="nombre" type="text" value="'+boton.parent().parent().children(":nth-child(1)").val()+'">');
+      boton.parent().parent().children(":nth-child(2)").html('<input name="descripcion" type="textarea" value="'+boton.parent().parent().children(":nth-child(2)").text()+'">');
+      boton.parent().parent().children(":nth-child(3)").html('<input name="fecha_creacion" type="date" value="'+boton.parent().parent().children(":nth-child(3)").text()+'">');
+      boton.parent().parent().children(":nth-child(4)").html('<input name="telefono" type="text" value="'+boton.parent().parent().children(":nth-child(4)").text()+'">');
+      boton.parent().parent().children(":nth-child(5)").html('<input name="direccion" type="text" value="'+boton.parent().parent().children(":nth-child(5)").text()+'">');  
   }else{
     $(".agregar").hide();
     boton.parent().parent().children(":nth-child(1)").html('<input name="nombre" type="text" value="'+boton.parent().parent().children(":nth-child(1)").text()+'">');
@@ -106,9 +113,10 @@ function guardar(boton,additional) {
     //$("#main").load("./index.php");
     //window.location.href = "http://stackoverflow.com";//la intencion es llamar a una nueva pagina para editar un permiso
   }else if(current==="nucleo"){
-     if(additional)
+
+     if(additional){
        url="includes/api.php?request=guardar&tipo="+additional+"&id="+id;
- 
+      
      url+="&"+"foto="+boton.parent().children("input,select").filter("[name='foto']").val();
      url+="&"+"nombre="+boton.parent().children("input,select").filter("[name='nombre']").val();
      url+="&"+"apellido="+boton.parent().children("input,select").filter("[name='apellido']").val();
@@ -128,12 +136,24 @@ function guardar(boton,additional) {
      url+="&"+"tw="+boton.parent().children("input,select").filter("[name='tw']").val();
      url+="&"+"user="+boton.parent().children("input,select").filter("[name='user']").val();
      url+="&"+"pass="+boton.parent().children("input,select").filter("[name='pass']").val();
+    }else{
+      url+="&"+"id_persona="+$('#selPersona').val();
+      url+="&"+"id_cargo="+$('#selCargo').val().substring(0,1);
+      url+="&"+"id_area="+$('#selCargo').val().substring(2,3);
+      url+="&"+"fecha_inicio="+boton.parent().parent().children(":nth-child(3)").children("input").val();
+    } 
   }else if(current==="tipos_instancia"){
     //table+='<td><input name="logo" type="file"></td>';}
     url+="&"+boton.parent().parent().children(":nth-child(1)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(1)").children("input").val();
     url+="&"+boton.parent().parent().children(":nth-child(2)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(2)").children("input").val();
     url+="&"+boton.parent().parent().children(":nth-child(3)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(3)").children("input").val();
     url+="&"+boton.parent().parent().children(":nth-child(4)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(4)").children("input").val();
+  }else if(current==="centros"){
+    url+="&"+boton.parent().parent().children(":nth-child(1)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(1)").children("input").val();
+    url+="&"+boton.parent().parent().children(":nth-child(2)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(2)").children("input").val();
+    url+="&"+boton.parent().parent().children(":nth-child(3)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(3)").children("input").val();
+    url+="&"+boton.parent().parent().children(":nth-child(4)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(4)").children("input").val();
+    url+="&"+boton.parent().parent().children(":nth-child(4)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(5)").children("input").val();
   }else{
     url+="&"+boton.parent().parent().children(":nth-child(1)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(1)").children("input").val();
     url+="&"+boton.parent().parent().children(":nth-child(2)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(2)").children("input").val();
@@ -186,7 +206,43 @@ function guardar(boton,additional) {
         nuevo['nombre']=nombre;
         nuevo['descripcion']=descripcion;
 
+      }else if(current==="centros"){
+        var nombre=boton.parent().parent().children(":nth-child(1)").children("input").val();
+        boton.parent().parent().children(":nth-child(1)").html(nombre);
+        var descripcion=boton.parent().parent().children(":nth-child(2)").children("input").val();
+        boton.parent().parent().children(":nth-child(2)").html(descripcion);
+        var fecha_creacion=boton.parent().parent().children(":nth-child(3)").children("input").val();
+        boton.parent().parent().children(":nth-child(3)").html(fecha_creacion);
+        var telefono=boton.parent().parent().children(":nth-child(4)").children("input").val();
+        boton.parent().parent().children(":nth-child(4)").html(telefono);
+        var direccion=boton.parent().parent().children(":nth-child(5)").children("input").val();
+        boton.parent().parent().children(":nth-child(5)").html(direccion);
+        boton.parent().parent().attr("class","table_row "+current+json.id);
+
+        var nuevo={};
+        nuevo['id']=json.id;
+        nuevo['nombre']=nombre;
+        nuevo['descripcion']=descripcion;
+        nuevo['fecha_creacion']=fecha_creacion;
+        nuevo['telefono']=telefono;
+        nuevo['direccion']=direccion;
       }else if(current==="nucleo"){
+        var persona_id=boton.parent().parent().children(":nth-child(1)").children("input").val();
+        boton.parent().parent().children(":nth-child(1)").html(persona_id);
+        var cargo_id=boton.parent().parent().children(":nth-child(2)").children("input").val();
+        boton.parent().parent().children(":nth-child(2)").html(cargo_id);
+        var area_id=boton.parent().parent().children(":nth-child(3)").children("input").val();
+        boton.parent().parent().children(":nth-child(3)").html(area_id);
+        var fecha_inicio=boton.parent().parent().children(":nth-child(4)").children("input").val();
+        boton.parent().parent().children(":nth-child(4)").html(fecha_inicio);
+        boton.parent().parent().attr("class","table_row "+current+json.id);
+
+        var nuevo={};
+        nuevo['id']=json.id;
+        nuevo['persona_id']=persona_id;
+        nuevo['cargo_id']=cargo_id;
+        nuevo['area_id']=area_id;
+        nuevo['fecha_inicio']=fecha_inicio;
        if(additional)
           alert("hols");
 
@@ -317,16 +373,21 @@ $(document).ready(function(){
        }
        table+='<option value="new">Agregar Persona...</option>'+
        '</select></td>';
-       table+='<td><select name="nombre"><option value="">ELEGIR CARGO</option>'+
-       '<option value="">ENCARGADO GENERAL</option>'+
-       '<option value="">ENCARGADO DE INSTRUCCIÓN</option>'+
-       '<option value="">ENCARGADO DE ESPIRITUALIDAD</option>'+
-       '<option value="">ENCARGADO DE APOSTOLADO</option>'+
-       '<option value="">ENCARGADO DE TEMPORALIDADES</option>'+
-       '<option value="">ENCARGADO DE COMUNICACIONES</option>'+
+       table+='<td><select id="selCargo" name="cargo"><option value="">ELEGIR CARGO</option>';
+        for(var a=0;a<data.data[current]['info']['areas'].length;a++){
+         table+='<option value="'+data.data[current]['info']['cargo'][0].id+"-"+data.data[current]['info']['areas'][a].id+'">'+data.data[current]['info']['cargo'][0].nombre+" "+data.data[current]['info']['areas'][a].nombre+'</option>';
+        }
        '</select></td>';
        table+='<td><input name="fecha" type="date"></td>';
+       table+='<td><input type="button" value="GUARDAR" class="nuevo_nucleo"><br/><input type="button" value="CANCELAR" class="cancelar"></td></tr>';
        //table+='<td><input placeholder="DESCRIPCIÓN" name="descripcion" type="textarea"></td>';  
+    }else if(current==="centros"){
+      table+='<td><input placeholder="NOMBRE" name="nombre" type="text"></td>';
+      table+='<td><input placeholder="DESCRIPCIÓN" name="descripcion" type="textarea"></td>';
+      table+='<td><input placeholder="FECHA DE CREACIÓN" name="fecha_creacion" type="date"></td>';
+      table+='<td><input placeholder="TELÉFONO" name="telefono" type="text"></td>';
+      table+='<td><input placeholder="DIRECCIÓN" name="direccion" type="text"></td>';
+      table+='<td><input type="button" value="GUARDAR" class="guardar"><br/><input type="button" value="CANCELAR" class="cancelar"></td></tr>';
     }else{
       table+='<td><input placeholder="NOMBRE" name="nombre" type="text"></td>';
       table+='<td><input placeholder="DESCRIPCI&Oacute;N" name="descripcion" type="textarea"></td>';
@@ -341,6 +402,9 @@ $(document).ready(function(){
     guardar($(this),"");
     });
     $('input.nuevo_permiso').click(function(){
+      guardar($(this),"");
+    });
+    $('input.nuevo_nucleo').click(function(){
       guardar($(this),"");
     });
     $('input.cancelar').click(function(){
