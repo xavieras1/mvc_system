@@ -110,13 +110,35 @@ function set_table(current){
        for(var j=0;j<$data.length;j++){
          table+='<tr id="'+current+$data[j].id+'" class="table_row '+current+$data[j].id+'">'
          table+='<td>'+$data[j].nombre+'</td>';
-         table+='<td>'+$data[j].descripcion+'</td>';
+         table+='<td>'+$data[j].cargo+'</td>';
+         table+='<td>'+$data[j].fecha_inicio+'</td>';
          table+='<td><input type="button" value="EDITAR" class="btneditar"><br/><input type="button" value="ELIMINAR" class="btneliminar" onclick="eliminar(\''+current+'\','+$data[j].id+')"></td>';
          table+='</tr>';
        }
      }else{
        table+='<tr class="none"><td>NO HAY ELEMENTOS</td></tr>';
      }
+  }else if(current==="centros"){    
+    table+='<th>NOMBRE</th>';
+    table+='<th>DESCRIPCIÓN</th>';
+    table+='<th>FECHA DE CREACIÓN</th>';
+    table+='<th>TELÉFONO</th>';
+    table+='<th>DIRECCIÓN</th>';
+    table+='<th>FUNCIONES</th></tr>';
+    if($data[0]){
+      for(var j=0;j<$data.length;j++){
+        table+='<tr id="'+current+$data[j].id+'" class="table_row '+current+$data[j].id+'">'        
+        table+='<td>'+$data[j].nombre+'</td>';
+        table+='<td>'+$data[j].descripcion+'</td>';
+        table+='<td>'+$data[j].fecha_creacion+'</td>';
+        table+='<td>'+$data[j].telefono+'</td>';
+        table+='<td>'+$data[j].direccion+'</td>';
+        table+='<td><input type="button" value="EDITAR" class="btneditar"><br/><input type="button" value="ELIMINAR" class="btneliminar" onclick="eliminar(\''+current+'\','+$data[j].id+')"></td>';
+        table+='</tr>';
+      }
+    }else{
+      table+='<tr class="none"><td>NO HAY ELEMENTOS</td></tr>';
+    }  
   }else{//cargo o area
     table+='<th>NOMBRE</th>';
     table+='<th>DESCRIPCIÓN</th>';

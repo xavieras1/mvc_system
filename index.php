@@ -1,4 +1,4 @@
-<!--Angel Astudillo && Andrea Simbaña && Yuri Cosquillo-->
+<!--Angel Astudillo && Andrea Simbaña-->
 <!DOCTYPE html>
 <html>
   <head>
