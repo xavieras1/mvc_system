@@ -16,6 +16,8 @@ function getAge(dateString) {
 
 var id_perm;
 var nivel;
+var cargo, area, tipo, level;
+var alarm=0;
 function editar(boton) {
   var current=$('.active').attr('href').substring(1);
 
@@ -83,6 +85,7 @@ function editar(boton) {
 }
 function guardar(boton,additional) {
   var current=$('.active').attr('href').substring(1);
+  var $data=eval('('+JSON.stringify(data.data)+')')[current];
   var id="";
 
   if(boton.attr("class")==="save_permiso"){
@@ -179,18 +182,26 @@ function guardar(boton,additional) {
     }else{
       if(current==="permisos"){
         $(".father[href='#permisos']").trigger("click");
-        var cargo=boton.parent().parent().children(":nth-child(1)").children("input").val();
-        boton.parent().parent().children(":nth-child(1)").html(cargo);
-        var area=boton.parent().parent().children(":nth-child(2)").children("input").val();
-        boton.parent().parent().children(":nth-child(2)").html(area);
-        var tipo_instancia=boton.parent().parent().children(":nth-child(3)").children("input").val();
-        boton.parent().parent().children(":nth-child(3)").html(tipo_instancia);
-        var nivel=boton.parent().parent().children(":nth-child(4)").children("input").val();
-        boton.parent().parent().children(":nth-child(4)").html(nivel);
-        var permiso=boton.parent().parent().children(":nth-child(1)").children("input").val();
-        boton.parent().parent().children(":nth-child(1)").html(permiso);
-        var propiedad=boton.parent().parent().children(":nth-child(2)").children("input").val();
-        boton.parent().parent().children(":nth-child(2)").html(propiedad);
+        if (alarm===1){
+          var row='<tr class="table_row">';
+          row+='<td>'+cargo+'</td>';
+          row+='<td>'+area+'</td>';
+          row+='<td>'+tipo+'</td>';
+          row+='<td>'+level+'</td>';
+          row+='<td><select class="select_tipo">';
+          row+='<option value=".tipo0">--Ver Instancias--</option>';
+          for (var i = 0; i < $data.info.tipos.length; i++) { 
+            row+='<option value=".tipo'+$data.info.tipos[i].id+'">'+$data.info.tipos[i].nombre+'</option>';      
+          }
+          row+='</select></td>';
+          row+='<td></td>';
+          // for (var i = 0; i < $data.data[j].permisos.length; i++) {
+          //     row+='<span class="perm'+$data.data[j].id+'_'+i+' permiso_span">'+$(this).text()+$data.data[j].permisos[i].permiso+'</span>';
+          // }
+          row+='<td><input type="button" value="EDITAR" class="btneditar"></td>';
+          $('#main_table tbody').append(row);
+          alarm=0;
+        }
 
         var nuevo={};
         nuevo['id']=json.id;
@@ -417,9 +428,19 @@ $(document).ready(function(){
     $('#main_table tbody').append(table);
     $(".agregar").attr("disabled", "disabled");
     $('input.guardar').click(function(){
-    guardar($(this),"");
+      guardar($(this),"");
     });
     $('input.nuevo_permiso').click(function(){
+      alarm=1;
+      cargo=$('.select_cargo option:selected').text();
+      area=$('.select_area option:selected').text();
+      tipo=$('.select_tipo option:selected').text();
+      if($('.select_area option:selected').val()===".area0"){
+        area="";
+      }else if($('.select_tipo option:selected').val()===".tipo0"){
+        tipo="";  
+      }
+      level=$('.select_nivel').val();
       guardar($(this),"");
     });
     $('input.nuevo_nucleo').click(function(){
