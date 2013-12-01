@@ -90,8 +90,8 @@ function editar(boton) {
     }
     $('#main_table tbody').empty();
     set_table(current);
-  $(".agregar").removeAttr("disabled");
-   });
+    $(".agregar").removeAttr("disabled");
+  });
      
 }
 function guardar(boton,additional) {
@@ -288,19 +288,27 @@ function guardar(boton,additional) {
 
         /*******************LOCAL SESSION********************/
         var nuevo={};
-        nuevo['id']=json.id;
-        nuevo['nombre']=nombre;
-        nuevo['descripcion']=descripcion;
-        data.data[current].push(nuevo);//  --> local session , global session(php)
+        if(json.id==0){
+          nuevo['id']=id;
+          nuevo['nombre']=nombre;
+          nuevo['descripcion']=descripcion;
+          data.data[current][getIndexByIndex(data.data[current],id)]=nuevo;
+        }else{
+          nuevo['id']=json.id;
+          nuevo['nombre']=nombre;
+          nuevo['descripcion']=descripcion;
+          data.data[current].push(nuevo);
+        }
+        console.log(data.data[current]);
       }
       boton.parent().parent().children(":last-child").html('<input type="button" value="EDITAR" class="btneditar"><br/><input type="button" value="ELIMINAR" class="btneliminar">');
       
       $('.btneditar').click(function(){
-      editar($(this));
+        editar($(this));
       });
 
       $('.btneliminar').click(function(){
-      eliminar(current,nuevo['id']);
+        eliminar(current,nuevo['id']);
       });
       
       $(".agregar").removeAttr("disabled");
