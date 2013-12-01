@@ -193,15 +193,15 @@ function guardar(boton,additional) {
       if(current==="permisos"){
         $(".father[href='#permisos']").trigger("click");
         if (alarm===1){
-          var row='<tr class="table_row">';
+          var row='<tr class="table_row '+current+id+'">';
           row+='<td>'+cargo+'</td>';
           row+='<td>'+area+'</td>';
           row+='<td>'+tipo+'</td>';
           row+='<td>'+level+'</td>';
           row+='<td><select class="ver_instancia">';
           row+='<option value=".tipo0">--Ver Instancias--</option>';
-          for (var i = 0; i < $data.info.tipos.length; i++) { 
-            row+='<option value=".tipo'+$data.info.tipos[i].id+'">'+$data.info.tipos[i].nombre+'</option>';      
+          for (var i = 0; i < $data.info.tipos.length; i++) {
+            row+='<option value=".tipo'+id+'_'+$data.info.tipos[i].id+'">'+$data.info.tipos[i].nombre+'</option>';      
           }
           row+='</select></td>';
           row+='<td><span class="ver_permiso"></span></td>';
@@ -309,7 +309,8 @@ function guardar(boton,additional) {
       $('.ver_instancia').change(function(){
       //$('.ver_permiso').hide();
          $(this).find(":selected").each(function() {
-          var idt=$(this).attr('value').substring($(this).attr('value').indexOf(' ')+6);
+          var idt=$(this).attr('value').substring($(this).attr('value').indexOf('_')+1);
+          console.log(idt);
           for (var p = 0; p < permisos.length; p++) {
             if(ids[p]===idt){
               $('.ver_permiso').text(permisos[p]);
