@@ -117,8 +117,7 @@ function guardar(boton,additional) {
       }else{
         permisos.push("nada");
       }
-      
-    };
+    }
     url+="&nivel="+$('.select_nivel').val();
     url+="&ids="+ids;
     url+="&permisos="+permisos;
@@ -127,31 +126,32 @@ function guardar(boton,additional) {
   }else if(current==="nucleo"){
 
      if(additional){
-       url="includes/api.php?request=guardar&tipo="+additional+"&id="+id;
       
-     url+="&"+"foto="+boton.parent().children("input,select").filter("[name='foto']").val();
-     url+="&"+"nombre="+boton.parent().children("input,select").filter("[name='nombre']").val();
-     url+="&"+"apellido="+boton.parent().children("input,select").filter("[name='apellido']").val();
-     url+="&"+"ciudad="+boton.parent().children("input,select").filter("[name='ciudad']").val();
-     url+="&"+"sexo="+boton.parent().children("input,select").filter("[name='sexo']").val();
-     url+="&"+"edad="+boton.parent().children("input,select").filter("[name='edad']").val();
-     url+="&"+"nacimiento="+boton.parent().children("input,select").filter("[name='date']").val();
-     url+="&"+"domicilio="+boton.parent().children("input,select").filter("[name='address']").val();
-     url+="&"+"estudio="+boton.parent().children("input,select").filter("[name='estudio']").val();
-     url+="&"+"institucion="+boton.parent().children("input,select").filter("[name='institucion']").val();
-     url+="&"+"telefono="+boton.parent().children("input,select").filter("[name='home']").val();
-     url+="&"+"claro="+boton.parent().children("input,select").filter("[name='claro']").val();
-     url+="&"+"movi="+boton.parent().children("input,select").filter("[name='movi']").val();
-     url+="&"+"pin="+boton.parent().children("input,select").filter("[name='pin']").val();
-     url+="&"+"email="+boton.parent().children("input,select").filter("[name='email']").val();
-     url+="&"+"fb="+boton.parent().children("input,select").filter("[name='fb']").val();
-     url+="&"+"tw="+boton.parent().children("input,select").filter("[name='tw']").val();
-     url+="&"+"user="+boton.parent().children("input,select").filter("[name='user']").val();
-     url+="&"+"pass="+boton.parent().children("input,select").filter("[name='pass']").val();
+    if(additional){
+       url="includes/api.php?request=guardar&tipo="+additional+"&id="+id;
+       url+="&"+"foto="+boton.parent().children("input,select").filter("[name='foto']").val();
+       url+="&"+"nombre="+boton.parent().children("input,select").filter("[name='nombre']").val();
+       url+="&"+"apellido="+boton.parent().children("input,select").filter("[name='apellido']").val();
+       url+="&"+"ciudad="+boton.parent().children("input,select").filter("[name='ciudad']").val();
+       url+="&"+"sexo="+boton.parent().children("input,select").filter("[name='sexo']").val();
+       url+="&"+"edad="+boton.parent().children("input,select").filter("[name='edad']").val();
+       url+="&"+"nacimiento="+boton.parent().children("input,select").filter("[name='date']").val();
+       url+="&"+"domicilio="+boton.parent().children("input,select").filter("[name='address']").val();
+       url+="&"+"estudio="+boton.parent().children("input,select").filter("[name='estudio']").val();
+       url+="&"+"institucion="+boton.parent().children("input,select").filter("[name='institucion']").val();
+       url+="&"+"telefono="+boton.parent().children("input,select").filter("[name='home']").val();
+       url+="&"+"claro="+boton.parent().children("input,select").filter("[name='claro']").val();
+       url+="&"+"movi="+boton.parent().children("input,select").filter("[name='movi']").val();
+       url+="&"+"pin="+boton.parent().children("input,select").filter("[name='pin']").val();
+       url+="&"+"email="+boton.parent().children("input,select").filter("[name='email']").val();
+       url+="&"+"fb="+boton.parent().children("input,select").filter("[name='fb']").val();
+       url+="&"+"tw="+boton.parent().children("input,select").filter("[name='tw']").val();
+       url+="&"+"user="+boton.parent().children("input,select").filter("[name='user']").val();
+       url+="&"+"pass="+boton.parent().children("input,select").filter("[name='pass']").val();
     }else{
       url+="&"+"id_persona="+$('#selPersona').val();
-      url+="&"+"id_cargo="+$('#selCargo').val().substring(0,1);
-      url+="&"+"id_area="+$('#selCargo').val().substring(2,3);
+      url+="&"+"id_cargo="+$('#selCargo').val().substring(0,$('#selCargo').val().indexOf('-'));
+      url+="&"+"id_area="+$('#selCargo').val().substring($('#selCargo').val().indexOf('-')+1);
       url+="&"+"fecha_inicio="+boton.parent().parent().children(":nth-child(3)").children("input").val();
     } 
   }else if(current==="tipos_instancia"){
@@ -173,6 +173,7 @@ function guardar(boton,additional) {
   /*for (var i = 0; i < $('table input[type="text"]').length; i++) {
     url+='&'+$($('table input[type="text"]')[i]).attr('name')+'='+$($('table input[type="text"]')[i]).val();
   };*/
+  /**********************GUARDAR EN DB**********************/
   console.log("url: "+url);
   $.ajax({
     url: url,
@@ -193,15 +194,27 @@ function guardar(boton,additional) {
           row+='<td>'+level+'</td>';
           row+='<td><select class="ver_instancia">';
           row+='<option value=".tipo0">--Ver Instancias--</option>';
-            for (var i = 0; i < $data.info.tipos.length; i++) { 
-               row+='<option value=".tipo'+$data.info.tipos[i].id+'">'+$data.info.tipos[i].nombre+'</option>';      
-            }        
+          for (var i = 0; i < $data.info.tipos.length; i++) { 
+            row+='<option value=".tipo'+$data.info.tipos[i].id+'">'+$data.info.tipos[i].nombre+'</option>';      
+          }
           row+='</select></td>';
           row+='<td><span class="ver_permiso"></span></td>';
           row+='<td><input type="button" value="EDITAR" class="btneditar"></td>';
           $('#main_table tbody').append(row);
           alarm=0; 
         }
+          $('#main_table tbody').append(row);
+          alarm=0;
+        }
+
+        var nuevo={};
+        nuevo['id']=json.id;
+        nuevo['cargo_id']=cargo;
+        nuevo['area_id']=area;
+        nuevo['tipo_instancia_id']=tipo;
+        nuevo['nivel']=nivel;
+        nuevo['permisos']=permisos;
+        data.data[current].data.push(nuevo);
         //window.location.href = "http://stackoverflow.com";//la intencion es llamar a una nueva pagina para editar un permiso
       }else if(current==="tipos_instancia"){
         //table+='<td><input name="logo" type="file"></td>';}
@@ -263,16 +276,19 @@ function guardar(boton,additional) {
           alert("hols");
 
       }else{
+        /**********************FRONT END**********************/
         var nombre=boton.parent().parent().children(":nth-child(1)").children("input").val();
         boton.parent().parent().children(":nth-child(1)").html(nombre);
         var descripcion=boton.parent().parent().children(":nth-child(2)").children("input").val();
         boton.parent().parent().children(":nth-child(2)").html(descripcion);
         boton.parent().parent().attr("class","table_row "+current+json.id);
+
+        /**********************LOCAL SESSION**********************/
         var nuevo={};
         nuevo['id']=json.id;
         nuevo['nombre']=nombre;
         nuevo['descripcion']=descripcion;
-        //data.data[current].push(nuevo);  --> local session , global session(php)
+        data.data[current].push(nuevo);//  --> local session , global session(php)
       }
       boton.parent().parent().children(":last-child").html('<input type="button" value="EDITAR" class="btneditar"><br/><input type="button" value="ELIMINAR" class="btneliminar">');
       
@@ -402,8 +418,8 @@ $(document).ready(function(){
        table+='<option value="new">Agregar Persona...</option>'+
        '</select></td>';
        table+='<td><select id="selCargo" name="cargo"><option value="">ELEGIR CARGO</option>';
-        for(var a=0;a<data.data[current]['info']['areas'].length;a++){
-         table+='<option value="'+data.data[current]['info']['cargo'][0].id+"-"+data.data[current]['info']['areas'][a].id+'">'+data.data[current]['info']['cargo'][0].nombre+" "+data.data[current]['info']['areas'][a].nombre+'</option>';
+        for(var a=0;a<data.data[current]['info']['cargos'].length;a++){
+         table+='<option value="'+data.data[current]['info']['cargos'][a].id+'">'+data.data[current]['info']['cargos'][a].cargo_nombre+" "+data.data[current]['info']['cargos'][a].area_nombre+'</option>';
         }
        '</select></td>';
        table+='<td><input name="fecha" type="date"></td>';
@@ -427,23 +443,18 @@ $(document).ready(function(){
     $('#main_table tbody').append(table);
     $(".agregar").attr("disabled", "disabled");
     $('input.guardar').click(function(){
-    guardar($(this),"");
+      guardar($(this),"");
     });
     $('input.nuevo_permiso').click(function(){
       alarm=1;
+      cargo=$('.select_cargo option:selected').text();
+      area=$('.select_area option:selected').text();
+      tipo=$('.select_tipo option:selected').text();
       if($('.select_area option:selected').val()===".area0"){
         area="";
-        cargo=$('.select_cargo option:selected').text();
-        tipo=$('.select_tipo option:selected').text();
-      }  
-      else if($('.select_tipo option:selected').val()===".tipo0"){
+      }else if($('.select_tipo option:selected').val()===".tipo0"){
         tipo="";  
-        cargo=$('.select_cargo option:selected').text();
-        area=$('.select_area option:selected').text();  
-      }else{
-       cargo=$('.select_cargo option:selected').text();
-       area=$('.select_area option:selected').text();
-       tipo=$('.select_tipo option:selected').text();
+
       }
       level=$('.select_nivel').val();
       guardar($(this),"");

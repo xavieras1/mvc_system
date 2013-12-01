@@ -147,7 +147,7 @@ ul.roles li a {
 	border: 1px solid #005597;
 	box-shadow: 5px 5px 5px #1A1A1A;
 	float: left;
-	width: 80%;
+	width: 73%;
 	min-height: 450px;
 	background-color: #fff;
 	margin-left: 25px;
@@ -170,16 +170,6 @@ ul.roles li a {
 	float: left;
 	margin-top: -1px;
 	margin-left: 8px;
-}
-#main{
-	border: 1px solid #005597;
-	box-shadow: 5px 5px 5px #1A1A1A;
-	float: left;
-	width: 80%;
-	min-height: 450px;
-	background-color: #fff;
-	margin-left: 25px;
-	margin-top: 25px;
 }
 /*BUTTON*/
 input[type="button"].agregar,input[type="button"].cerrar{
@@ -296,7 +286,7 @@ height: 120px;
 	margin-right: 22px;
 }
 
-.btneditar, .btneliminar, .cancelar, .guardar, .save_permiso, .nuevo_permiso{
+.btneditar, .btneliminar, .cancelar, .guardar, .save_permiso, .nuevo_permiso, .nuevo_nucleo{
 	height: 21px;
 	width: 71px;
 	font-size: 10px;

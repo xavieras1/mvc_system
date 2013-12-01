@@ -1,0 +1,275 @@
+{
+  "info": {
+    "id": "500",
+    "persona_id": "1",
+    "cargo_id": "5",
+    "tipo_instancia_id": "0",
+    "area_id": "0",
+    "instancia_permanencia_id": "0",
+    "fecha_inicio": "2013-08-12",
+    "fecha_fin": null,
+    "permiso": "",
+    "id_tipo_instancia": "0",
+    "nivel": "1",
+    "nombre_cargo": "Super admin",
+    "descripcion_cargo": "Cargo que se encarga de administrar el sistema"
+  },
+  "data": {
+    "cargo": [
+      {
+        "id": "7",
+        "nombre": "Agrupado",
+        "descripcion": "Persona que asiste a una asociaci\u00f3n."
+      },
+      {
+        "id": "6",
+        "nombre": "Animador",
+        "descripcion": "Persona responable y que dirige grupos."
+      },
+      {
+        "id": "22",
+        "nombre": "Encargado",
+        "descripcion": "Persona que asume un Rol"
+      },
+      {
+        "id": "5",
+        "nombre": "Super admin",
+        "descripcion": "Cargo que se encarga de administrar el sistema"
+      },
+      {
+        "id": "21",
+        "nombre": "Visitante",
+        "descripcion": "Persona ajena al MVC que asiste a instancias del MVC"
+      }
+    ],
+    "area": [
+      {
+        "id": "4",
+        "nombre": "Apostolado",
+        "descripcion": "Es el \u00e1rea que vela por la Fe en la acci\u00f3n de toda la instancia"
+      },
+      {
+        "id": "3",
+        "nombre": "Espiritualidad",
+        "descripcion": "Es el \u00e1rea que vela por la Fe en el coraz\u00f3n de toda la instancia"
+      },
+      {
+        "id": "1",
+        "nombre": "General",
+        "descripcion": "Es el \u00e1rea que vela por toda la instancia."
+      },
+      {
+        "id": "2",
+        "nombre": "Instrucci\u00f3n",
+        "descripcion": "Es el \u00e1rea que vela por la Fe en la mente de toda la instancia"
+      },
+      {
+        "id": "5",
+        "nombre": "Temporalidades",
+        "descripcion": "Es el \u00e1rea que vela por los bienes temporales de toda la instancia"
+      }
+    ],
+    "tipos_instancia": [
+      {
+        "id": "1",
+        "clasificacion": "Asociaci\u00f3n",
+        "nombre": "Agrupaci\u00f3n Mariana",
+        "descripcion": "Grupo de j\u00f3venes, hombres o mujeres.",
+        "logo": ""
+      },
+      {
+        "id": "2",
+        "clasificacion": "",
+        "nombre": "Encargado",
+        "descripcion": "Persona que asume un rol",
+        "logo": ""
+      }
+    ],
+    "permisos": {
+      "info": {
+        "cargos": [
+          {
+            "id": "7",
+            "nombre": "Agrupado",
+            "descripcion": "Persona que asiste a una asociaci\u00f3n."
+          },
+          {
+            "id": "6",
+            "nombre": "Animador",
+            "descripcion": "Persona responable y que dirige grupos."
+          },
+          {
+            "id": "22",
+            "nombre": "Encargado",
+            "descripcion": "Persona que asume un Rol"
+          },
+          {
+            "id": "5",
+            "nombre": "Super admin",
+            "descripcion": "Cargo que se encarga de administrar el sistema"
+          },
+          {
+            "id": "21",
+            "nombre": "Visitante",
+            "descripcion": "Persona ajena al MVC que asiste a instancias del MVC"
+          }
+        ],
+        "areas": [
+          {
+            "id": "4",
+            "nombre": "Apostolado",
+            "descripcion": "Es el \u00e1rea que vela por la Fe en la acci\u00f3n de toda la instancia"
+          },
+          {
+            "id": "3",
+            "nombre": "Espiritualidad",
+            "descripcion": "Es el \u00e1rea que vela por la Fe en el coraz\u00f3n de toda la instancia"
+          },
+          {
+            "id": "1",
+            "nombre": "General",
+            "descripcion": "Es el \u00e1rea que vela por toda la instancia."
+          },
+          {
+            "id": "2",
+            "nombre": "Instrucci\u00f3n",
+            "descripcion": "Es el \u00e1rea que vela por la Fe en la mente de toda la instancia"
+          },
+          {
+            "id": "5",
+            "nombre": "Temporalidades",
+            "descripcion": "Es el \u00e1rea que vela por los bienes temporales de toda la instancia"
+          }
+        ],
+        "tipos": [
+          {
+            "id": "1",
+            "clasificacion": "Asociaci\u00f3n",
+            "nombre": "Agrupaci\u00f3n Mariana",
+            "descripcion": "Grupo de j\u00f3venes, hombres o mujeres.",
+            "logo": ""
+          },
+          {
+            "id": "2",
+            "clasificacion": "",
+            "nombre": "Encargado",
+            "descripcion": "Persona que asume un rol",
+            "logo": ""
+          }
+        ]
+      },
+      "data": [
+        {
+          "id": "5-0-0",
+          "cargo_id": "5",
+          "area_id": "0",
+          "tipo_instancia_id": "0",
+          "nivel": "1"
+        },
+        {
+          "id": "22-1-0",
+          "cargo_id": "22",
+          "area_id": "1",
+          "tipo_instancia_id": "0",
+          "nivel": "2",
+          "permisos": [
+            {
+              "permiso": "",
+              "tipo": "1"
+            },
+            {
+              "permiso": "",
+              "tipo": "2"
+            }
+          ]
+        }
+      ]
+    },
+    "nucleo": {
+      "info": {
+        "personas": [
+          {
+            "id": "2",
+            "nombre": "Andrea",
+            "apellido": "Simba\u00f1a",
+            "ciudad": "",
+            "sexo": "",
+            "edad": "23",
+            "fecha_nacimiento": "1990-02-11",
+            "domicilio": "undefined",
+            "nivel_estudio": "",
+            "institucion": "ESPOL",
+            "telefono": "042423144",
+            "celular_claro": "0988442019",
+            "celular_movistar": "",
+            "pin": "",
+            "email": "andy.nsb112@gmail.com",
+            "facebook": "andy.nsb",
+            "twitter": "@andy_nsb",
+            "foto": "",
+            "usuario": "Andy",
+            "contrasena": "andy"
+          },
+          {
+            "id": "1",
+            "nombre": "Angel",
+            "apellido": "Astudillo",
+            "ciudad": "Santiago de Guayaquil",
+            "sexo": "Hombre",
+            "edad": "23",
+            "fecha_nacimiento": "1990-07-10",
+            "domicilio": "Duran",
+            "nivel_estudio": null,
+            "institucion": "ESPOL",
+            "telefono": null,
+            "celular_claro": null,
+            "celular_movistar": "+593987565557",
+            "pin": null,
+            "email": "xavieras1@gmail.com",
+            "facebook": "axaa7",
+            "twitter": "AXAstudillo",
+            "foto": null,
+            "usuario": "angel",
+            "contrasena": "annie"
+          },
+          {
+            "id": "3",
+            "nombre": "Annie",
+            "apellido": "Mogrovejo",
+            "ciudad": "",
+            "sexo": "",
+            "edad": "24",
+            "fecha_nacimiento": "1988-12-18",
+            "domicilio": "undefined",
+            "nivel_estudio": "",
+            "institucion": "ESPOL",
+            "telefono": "042249953",
+            "celular_claro": "",
+            "celular_movistar": "0992244376",
+            "pin": "",
+            "email": "anniemogrovejo@hotmail.com",
+            "facebook": "",
+            "twitter": "",
+            "foto": "",
+            "usuario": "annie",
+            "contrasena": "angel"
+          }
+        ],
+        "cargos": [
+          {
+            "id": "22-1-0",
+            "cargo_id": "22",
+            "area_id": "1",
+            "tipo_instancia_id": "0",
+            "permiso": "",
+            "id_tipo_instancia": "0",
+            "nivel": "2",
+            "area_nombre": "General",
+            "cargo_nombre": "Encargado"
+          }
+        ]
+      },
+      "data": []
+    }
+  }
+}
