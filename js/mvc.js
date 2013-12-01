@@ -14,6 +14,14 @@ function getAge(dateString) {
   return age;
 }
 
+function getIndexByIndex(array,id){
+  for(var i=0; i < array.length; i++) { 
+    if(array[i].id==id){
+      return i;
+    }
+  }
+}
+
 var id_perm;
 var nivel;
 var cargo, area, tipo, level;
@@ -124,8 +132,6 @@ function guardar(boton,additional) {
     //$("#main").load("./index.php");
     //window.location.href = "http://stackoverflow.com";//la intencion es llamar a una nueva pagina para editar un permiso
   }else if(current==="nucleo"){
-
-     if(additional){
       
     if(additional){
        url="includes/api.php?request=guardar&tipo="+additional+"&id="+id;
@@ -202,9 +208,6 @@ function guardar(boton,additional) {
           row+='<td><input type="button" value="EDITAR" class="btneditar"></td>';
           $('#main_table tbody').append(row);
           alarm=0; 
-        }
-          $('#main_table tbody').append(row);
-          alarm=0;
         }
 
         var nuevo={};
@@ -283,7 +286,7 @@ function guardar(boton,additional) {
         boton.parent().parent().children(":nth-child(2)").html(descripcion);
         boton.parent().parent().attr("class","table_row "+current+json.id);
 
-        /**********************LOCAL SESSION**********************/
+        /*******************LOCAL SESSION********************/
         var nuevo={};
         nuevo['id']=json.id;
         nuevo['nombre']=nombre;
@@ -332,15 +335,8 @@ function eliminar(table,id){
         alert(json.descriptionerror);
       }else{
         var trId= table + id;
-         $('#' + trId).remove();
-
-        var flag=0;
-        for (var i = 0; i < data.data[table].length&&flag===0; i++) {
-          if(data.data[table][i].id===id){
-            data.data[table].splice(i, 1);
-            flag=1;
-          }
-        }
+        $('#' + trId).remove();
+        data.data[table].splice(getIndexByIndex(data.data[table],id), 1);
       }
     });
   }

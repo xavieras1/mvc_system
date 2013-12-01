@@ -267,27 +267,25 @@ class modelo
 				break;
 			default:
 				if ($parametros["id"]){
+					/************GLOBAL SESSION***************/
+					$_SESSION["current_cargo"]["data"][$tipo][$this.getIndexByIndex($_SESSION["current_cargo"]["data"][$tipo],$parametros["id"])]=array('id'=>$parametros["id"],"nombre"=>$parametros["nombre"],"descripcion"=>$parametros["descripcion"]);
 					/*******************DB*********************/
-					$insert=$this->DBC('UPDATE '.$tipo.' SET nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\' WHERE id='.$parametros["id"],1);
-					/*************GLOBAL SESSION***************/
+					return $this->DBC('UPDATE '.$tipo.' SET nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\' WHERE id='.$parametros["id"],1);
+				}
+				else{
+					/*******************DB*********************/
+					$insert=$this->DBC('INSERT INTO '.$tipo.' SET  nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\'',1);
+					/************GLOBAL SESSION***************/
 					array_push($_SESSION["current_cargo"]["data"][$tipo], array('id'=>$insert["id"],"nombre"=>$parametros["nombre"],"descripcion"=>$parametros["descripcion"]));
 					return $insert;
 				}
-				else
-					return $this->DBC('INSERT INTO '.$tipo.' SET  nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\'',1);
           		break;
 		}
 	}
 
 	public function delete($tipo, $id){
 		session_start();
-		$flag=0;
-        for ($i = 0; $i < sizeof($_SESSION["current_cargo"]["data"][$tipo])&&$flag==0; $i++) {
-          if($_SESSION["current_cargo"]["data"][$tipo][$i]["id"]==$id){
-            unset($_SESSION["current_cargo"]["data"][$tipo][$i]);
-            $flag=1;
-          }
-        }
+    unset($_SESSION["current_cargo"]["data"][$tipo][$this.getIndexByIndex($_SESSION["current_cargo"]["data"][$tipo],$id)]);
 		switch ($tipo) {
 			case 'tipos_instancia':
 				return $this->DBC('DELETE FROM tipo_instancia WHERE id='.$id,1);
@@ -296,6 +294,13 @@ class modelo
 
 				return $this->DBC('DELETE FROM '.$tipo.' WHERE id='.$id,1);
 				break;
+		}
+	}
+	private function getIndexByIndex($array,$id){
+		for ($i=0; $i < sizeof($array); $i++) { 
+			if($array[$i]["id"]==$id){
+				return $i;
+			}
 		}
 	}
 	/*NOMBRE: DBC
