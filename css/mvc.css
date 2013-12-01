@@ -162,7 +162,7 @@ ul.roles li a {
 	text-align: center;
 	padding-top: 7px;
 }
-#select_levels, .select_cargo, .select_area, .select_tipo, .select_nivel, .tipo_instancia{
+#select_levels, .select_cargo, .select_area, .select_tipo, .select_nivel, .tipo_instancia, .ver_instancia{
 	font-size: 11px;
 	margin-top: 0px;
 }
