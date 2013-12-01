@@ -18,6 +18,8 @@ var id_perm;
 var nivel;
 var cargo, area, tipo, level;
 var alarm=0;
+var permisos=new Array();
+var ids=new Array();
 function editar(boton) {
   var current=$('.active').attr('href').substring(1);
 
@@ -105,10 +107,8 @@ function guardar(boton,additional) {
   }
   if(current==="permisos"){
     var arr=$('.table_row');
-    var ids=new Array();
-    var permisos=new Array();
-      // ids.push("0");
-      // permisos.push(" ");
+    // var ids=new Array();
+    // var permisos=new Array();
     for (var i = 0; i < arr.length; i++) {
       var thenum=$(arr[i]).children(":nth-child(1)").attr('id').replace( /^\D+/g, '');
       ids.push(thenum);
@@ -191,16 +191,13 @@ function guardar(boton,additional) {
           row+='<td>'+area+'</td>';
           row+='<td>'+tipo+'</td>';
           row+='<td>'+level+'</td>';
-          row+='<td><select class="select_tipo">';
+          row+='<td><select class="ver_instancia">';
           row+='<option value=".tipo0">--Ver Instancias--</option>';
             for (var i = 0; i < $data.info.tipos.length; i++) { 
                row+='<option value=".tipo'+$data.info.tipos[i].id+'">'+$data.info.tipos[i].nombre+'</option>';      
             }        
           row+='</select></td>';
-          row+='<td></td>';
-            // for (var i = 0; i < $data.data[j].permisos.length; i++) {          
-            //     row+='<span class="perm'+$data.data[j].id+'_'+i+' permiso_span">'+$(this).text()+$data.data[j].permisos[i].permiso+'</span>';
-              // }
+          row+='<td><span class="ver_permiso"></span></td>';
           row+='<td><input type="button" value="EDITAR" class="btneditar"></td>';
           $('#main_table tbody').append(row);
           alarm=0; 
@@ -289,6 +286,18 @@ function guardar(boton,additional) {
       
       $(".agregar").removeAttr("disabled");
       $(".agregar").show();
+      //$('.ver_permiso').hide();
+      $('.ver_instancia').change(function(){
+      //$('.ver_permiso').hide();
+         $(this).find(":selected").each(function() {
+          var idt=$(this).attr('value').substring($(this).attr('value').indexOf(' ')+6);
+          for (var p = 0; p < permisos.length; p++) {
+            if(ids[p]===idt){
+              $('.ver_permiso').text(permisos[p]);
+            }            
+          }
+         });
+      });
     }
   });
 }
