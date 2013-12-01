@@ -1,5 +1,5 @@
 // JavaScript Document
-//Angel Astudillo && Andrea Simbaña && Yuri Cosquillo
+//Angel Astudillo && Andrea Simbaña
 // Wait until the DOM has loaded before querying the document
 
 function getAge(dateString) {
@@ -16,6 +16,10 @@ function getAge(dateString) {
 
 var id_perm;
 var nivel;
+var cargo, area, tipo, level;
+var alarm=0;
+var permisos=new Array();
+var ids=new Array();
 function editar(boton) {
   var current=$('.active').attr('href').substring(1);
 
@@ -28,6 +32,9 @@ function editar(boton) {
     }else if (nivel==="4"){//Animador
       $("#content_title").text(boton.parent().parent().children(":nth-child(1)").text()+" de "+
       boton.parent().parent().children(":nth-child(3)").text());
+    }else if (nivel==="2"){//Nucleo
+      $("#content_title").text(boton.parent().parent().children(":nth-child(1)").text()+" de "+
+      boton.parent().parent().children(":nth-child(2)").text());
     }else{  
       $("#content_title").text(boton.parent().parent().children(":nth-child(1)").text()+" de "+
       boton.parent().parent().children(":nth-child(2)").text()+" de "+
@@ -49,6 +56,13 @@ function editar(boton) {
       boton.parent().parent().children(":nth-child(2)").html('<input name="clasificacion" type="text" value="'+boton.parent().parent().children(":nth-child(2)").text()+'">');
       boton.parent().parent().children(":nth-child(3)").html('<input name="nombre" type="text" value="'+boton.parent().parent().children(":nth-child(3)").text()+'">');
       boton.parent().parent().children(":nth-child(4)").html('<input name="descripcion" type="textarea" value="'+boton.parent().parent().children(":nth-child(4)").text()+'">');
+  }else if(current==="centros"){    
+      $(".agregar").hide();
+      boton.parent().parent().children(":nth-child(1)").html('<input name="nombre" type="text" value="'+boton.parent().parent().children(":nth-child(1)").val()+'">');
+      boton.parent().parent().children(":nth-child(2)").html('<input name="descripcion" type="textarea" value="'+boton.parent().parent().children(":nth-child(2)").text()+'">');
+      boton.parent().parent().children(":nth-child(3)").html('<input name="fecha_creacion" type="date" value="'+boton.parent().parent().children(":nth-child(3)").text()+'">');
+      boton.parent().parent().children(":nth-child(4)").html('<input name="telefono" type="text" value="'+boton.parent().parent().children(":nth-child(4)").text()+'">');
+      boton.parent().parent().children(":nth-child(5)").html('<input name="direccion" type="text" value="'+boton.parent().parent().children(":nth-child(5)").text()+'">');  
   }else{
     $(".agregar").hide();
     boton.parent().parent().children(":nth-child(1)").html('<input name="nombre" type="text" value="'+boton.parent().parent().children(":nth-child(1)").text()+'">');
@@ -74,6 +88,8 @@ function editar(boton) {
 }
 function guardar(boton,additional) {
   var current=$('.active').attr('href').substring(1);
+  var $data=eval('('+JSON.stringify(data.data)+')')[current];
+
   var id="";
 
   if(boton.attr("class")==="save_permiso"){
@@ -91,14 +107,17 @@ function guardar(boton,additional) {
   }
   if(current==="permisos"){
     var arr=$('.table_row');
-    var ids=new Array();
-    var permisos=new Array();
-      // ids.push("0");
-      // permisos.push(" ");
+    // var ids=new Array();
+    // var permisos=new Array();
     for (var i = 0; i < arr.length; i++) {
       var thenum=$(arr[i]).children(":nth-child(1)").attr('id').replace( /^\D+/g, '');
       ids.push(thenum);
-      permisos.push($("input[name='permiso"+thenum+"']:checked").val());
+      if($("input[name='permiso"+thenum+"']:checked").val()==="editar" || $("input[name='permiso"+thenum+"']:checked").val()==="ver"){
+        permisos.push($("input[name='permiso"+thenum+"']:checked").val());
+      }else{
+        permisos.push("nada");
+      }
+      
     };
     url+="&nivel="+$('.select_nivel').val();
     url+="&ids="+ids;
@@ -106,9 +125,10 @@ function guardar(boton,additional) {
     //$("#main").load("./index.php");
     //window.location.href = "http://stackoverflow.com";//la intencion es llamar a una nueva pagina para editar un permiso
   }else if(current==="nucleo"){
-     if(additional)
+
+     if(additional){
        url="includes/api.php?request=guardar&tipo="+additional+"&id="+id;
- 
+      
      url+="&"+"foto="+boton.parent().children("input,select").filter("[name='foto']").val();
      url+="&"+"nombre="+boton.parent().children("input,select").filter("[name='nombre']").val();
      url+="&"+"apellido="+boton.parent().children("input,select").filter("[name='apellido']").val();
@@ -128,12 +148,24 @@ function guardar(boton,additional) {
      url+="&"+"tw="+boton.parent().children("input,select").filter("[name='tw']").val();
      url+="&"+"user="+boton.parent().children("input,select").filter("[name='user']").val();
      url+="&"+"pass="+boton.parent().children("input,select").filter("[name='pass']").val();
+    }else{
+      url+="&"+"id_persona="+$('#selPersona').val();
+      url+="&"+"id_cargo="+$('#selCargo').val().substring(0,1);
+      url+="&"+"id_area="+$('#selCargo').val().substring(2,3);
+      url+="&"+"fecha_inicio="+boton.parent().parent().children(":nth-child(3)").children("input").val();
+    } 
   }else if(current==="tipos_instancia"){
     //table+='<td><input name="logo" type="file"></td>';}
     url+="&"+boton.parent().parent().children(":nth-child(1)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(1)").children("input").val();
     url+="&"+boton.parent().parent().children(":nth-child(2)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(2)").children("input").val();
     url+="&"+boton.parent().parent().children(":nth-child(3)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(3)").children("input").val();
     url+="&"+boton.parent().parent().children(":nth-child(4)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(4)").children("input").val();
+  }else if(current==="centros"){
+    url+="&"+boton.parent().parent().children(":nth-child(1)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(1)").children("input").val();
+    url+="&"+boton.parent().parent().children(":nth-child(2)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(2)").children("input").val();
+    url+="&"+boton.parent().parent().children(":nth-child(3)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(3)").children("input").val();
+    url+="&"+boton.parent().parent().children(":nth-child(4)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(4)").children("input").val();
+    url+="&"+boton.parent().parent().children(":nth-child(4)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(5)").children("input").val();
   }else{
     url+="&"+boton.parent().parent().children(":nth-child(1)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(1)").children("input").val();
     url+="&"+boton.parent().parent().children(":nth-child(2)").children("input").attr("name")+"="+boton.parent().parent().children(":nth-child(2)").children("input").val();
@@ -152,20 +184,24 @@ function guardar(boton,additional) {
       alert(json.descriptionerror);
     }else{
       if(current==="permisos"){
-        $(".father[href='#permisos']").trigger("click");        
-        var cargo=boton.parent().parent().children(":nth-child(1)").children("input").val();
-        boton.parent().parent().children(":nth-child(1)").html(cargo);
-        var area=boton.parent().parent().children(":nth-child(2)").children("input").val();
-        boton.parent().parent().children(":nth-child(2)").html(area);
-        var tipo_instancia=boton.parent().parent().children(":nth-child(3)").children("input").val();
-        boton.parent().parent().children(":nth-child(3)").html(tipo_instancia);
-        var nivel=boton.parent().parent().children(":nth-child(4)").children("input").val();
-        boton.parent().parent().children(":nth-child(4)").html(nivel);
-        var permiso=boton.parent().parent().children(":nth-child(1)").children("input").val();
-        boton.parent().parent().children(":nth-child(1)").html(permiso);
-        var propiedad=boton.parent().parent().children(":nth-child(2)").children("input").val();
-        boton.parent().parent().children(":nth-child(2)").html(propiedad);
-
+        $(".father[href='#permisos']").trigger("click");
+        if (alarm===1){
+          var row='<tr class="table_row">';
+          row+='<td>'+cargo+'</td>';
+          row+='<td>'+area+'</td>';
+          row+='<td>'+tipo+'</td>';
+          row+='<td>'+level+'</td>';
+          row+='<td><select class="ver_instancia">';
+          row+='<option value=".tipo0">--Ver Instancias--</option>';
+            for (var i = 0; i < $data.info.tipos.length; i++) { 
+               row+='<option value=".tipo'+$data.info.tipos[i].id+'">'+$data.info.tipos[i].nombre+'</option>';      
+            }        
+          row+='</select></td>';
+          row+='<td><span class="ver_permiso"></span></td>';
+          row+='<td><input type="button" value="EDITAR" class="btneditar"></td>';
+          $('#main_table tbody').append(row);
+          alarm=0; 
+        }
         //window.location.href = "http://stackoverflow.com";//la intencion es llamar a una nueva pagina para editar un permiso
       }else if(current==="tipos_instancia"){
         //table+='<td><input name="logo" type="file"></td>';}
@@ -186,7 +222,43 @@ function guardar(boton,additional) {
         nuevo['nombre']=nombre;
         nuevo['descripcion']=descripcion;
 
+      }else if(current==="centros"){
+        var nombre=boton.parent().parent().children(":nth-child(1)").children("input").val();
+        boton.parent().parent().children(":nth-child(1)").html(nombre);
+        var descripcion=boton.parent().parent().children(":nth-child(2)").children("input").val();
+        boton.parent().parent().children(":nth-child(2)").html(descripcion);
+        var fecha_creacion=boton.parent().parent().children(":nth-child(3)").children("input").val();
+        boton.parent().parent().children(":nth-child(3)").html(fecha_creacion);
+        var telefono=boton.parent().parent().children(":nth-child(4)").children("input").val();
+        boton.parent().parent().children(":nth-child(4)").html(telefono);
+        var direccion=boton.parent().parent().children(":nth-child(5)").children("input").val();
+        boton.parent().parent().children(":nth-child(5)").html(direccion);
+        boton.parent().parent().attr("class","table_row "+current+json.id);
+
+        var nuevo={};
+        nuevo['id']=json.id;
+        nuevo['nombre']=nombre;
+        nuevo['descripcion']=descripcion;
+        nuevo['fecha_creacion']=fecha_creacion;
+        nuevo['telefono']=telefono;
+        nuevo['direccion']=direccion;
       }else if(current==="nucleo"){
+        var persona_id=boton.parent().parent().children(":nth-child(1)").children("input").val();
+        boton.parent().parent().children(":nth-child(1)").html(persona_id);
+        var cargo_id=boton.parent().parent().children(":nth-child(2)").children("input").val();
+        boton.parent().parent().children(":nth-child(2)").html(cargo_id);
+        var area_id=boton.parent().parent().children(":nth-child(3)").children("input").val();
+        boton.parent().parent().children(":nth-child(3)").html(area_id);
+        var fecha_inicio=boton.parent().parent().children(":nth-child(4)").children("input").val();
+        boton.parent().parent().children(":nth-child(4)").html(fecha_inicio);
+        boton.parent().parent().attr("class","table_row "+current+json.id);
+
+        var nuevo={};
+        nuevo['id']=json.id;
+        nuevo['persona_id']=persona_id;
+        nuevo['cargo_id']=cargo_id;
+        nuevo['area_id']=area_id;
+        nuevo['fecha_inicio']=fecha_inicio;
        if(additional)
           alert("hols");
 
@@ -214,6 +286,18 @@ function guardar(boton,additional) {
       
       $(".agregar").removeAttr("disabled");
       $(".agregar").show();
+      //$('.ver_permiso').hide();
+      $('.ver_instancia').change(function(){
+      //$('.ver_permiso').hide();
+         $(this).find(":selected").each(function() {
+          var idt=$(this).attr('value').substring($(this).attr('value').indexOf(' ')+6);
+          for (var p = 0; p < permisos.length; p++) {
+            if(ids[p]===idt){
+              $('.ver_permiso').text(permisos[p]);
+            }            
+          }
+         });
+      });
     }
   });
 }
@@ -317,16 +401,21 @@ $(document).ready(function(){
        }
        table+='<option value="new">Agregar Persona...</option>'+
        '</select></td>';
-       table+='<td><select name="nombre"><option value="">ELEGIR CARGO</option>'+
-       '<option value="">ENCARGADO GENERAL</option>'+
-       '<option value="">ENCARGADO DE INSTRUCCIÓN</option>'+
-       '<option value="">ENCARGADO DE ESPIRITUALIDAD</option>'+
-       '<option value="">ENCARGADO DE APOSTOLADO</option>'+
-       '<option value="">ENCARGADO DE TEMPORALIDADES</option>'+
-       '<option value="">ENCARGADO DE COMUNICACIONES</option>'+
+       table+='<td><select id="selCargo" name="cargo"><option value="">ELEGIR CARGO</option>';
+        for(var a=0;a<data.data[current]['info']['areas'].length;a++){
+         table+='<option value="'+data.data[current]['info']['cargo'][0].id+"-"+data.data[current]['info']['areas'][a].id+'">'+data.data[current]['info']['cargo'][0].nombre+" "+data.data[current]['info']['areas'][a].nombre+'</option>';
+        }
        '</select></td>';
        table+='<td><input name="fecha" type="date"></td>';
+       table+='<td><input type="button" value="GUARDAR" class="nuevo_nucleo"><br/><input type="button" value="CANCELAR" class="cancelar"></td></tr>';
        //table+='<td><input placeholder="DESCRIPCIÓN" name="descripcion" type="textarea"></td>';  
+    }else if(current==="centros"){
+      table+='<td><input placeholder="NOMBRE" name="nombre" type="text"></td>';
+      table+='<td><input placeholder="DESCRIPCIÓN" name="descripcion" type="textarea"></td>';
+      table+='<td><input placeholder="FECHA DE CREACIÓN" name="fecha_creacion" type="date"></td>';
+      table+='<td><input placeholder="TELÉFONO" name="telefono" type="text"></td>';
+      table+='<td><input placeholder="DIRECCIÓN" name="direccion" type="text"></td>';
+      table+='<td><input type="button" value="GUARDAR" class="guardar"><br/><input type="button" value="CANCELAR" class="cancelar"></td></tr>';
     }else{
       table+='<td><input placeholder="NOMBRE" name="nombre" type="text"></td>';
       table+='<td><input placeholder="DESCRIPCI&Oacute;N" name="descripcion" type="textarea"></td>';
@@ -341,6 +430,25 @@ $(document).ready(function(){
     guardar($(this),"");
     });
     $('input.nuevo_permiso').click(function(){
+      alarm=1;
+      if($('.select_area option:selected').val()===".area0"){
+        area="";
+        cargo=$('.select_cargo option:selected').text();
+        tipo=$('.select_tipo option:selected').text();
+      }  
+      else if($('.select_tipo option:selected').val()===".tipo0"){
+        tipo="";  
+        cargo=$('.select_cargo option:selected').text();
+        area=$('.select_area option:selected').text();  
+      }else{
+       cargo=$('.select_cargo option:selected').text();
+       area=$('.select_area option:selected').text();
+       tipo=$('.select_tipo option:selected').text();
+      }
+      level=$('.select_nivel').val();
+      guardar($(this),"");
+    });
+    $('input.nuevo_nucleo').click(function(){
       guardar($(this),"");
     });
     $('input.cancelar').click(function(){

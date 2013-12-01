@@ -214,14 +214,15 @@ class modelo
 				$band=0;
 			 	for ($i=0; $i<count($permisos); $i++){
 			 		if($rowinfo = $this->DBC('SELECT * FROM permisos WHERE cargo_id='.$cargoid.' AND area_id='.$areaid.' AND tipo_instancia_id='.$tipo_instanciaid.' AND id_tipo_instancia='.$ids[$i],0)){
-			 			if($parametros["id_tipo_instancia"]==0){
+			 			if($ids[$i]!=0){
 			 				$this->DBC('UPDATE permisos SET cargo_id='.$cargoid.', area_id='.$areaid.', tipo_instancia_id='.$tipo_instanciaid.',  nivel='.$parametros["nivel"].' WHERE cargo_id='.$cargoid.' AND area_id='.$areaid.' AND tipo_instancia_id='.$tipo_instanciaid,1);	
 			 			}else{
+
 			 				$this->DBC('UPDATE permisos SET cargo_id='.$cargoid.', area_id='.$areaid.', tipo_instancia_id='.$tipo_instanciaid.' , permiso=\''.$permisos[$i].'\', id_tipo_instancia='.$ids[$i].',  nivel='.$parametros["nivel"].' WHERE cargo_id='.$cargoid.' AND area_id='.$areaid.' AND tipo_instancia_id='.$tipo_instanciaid.' AND id_tipo_instancia='.$ids[$i],1);	
 			 			}
 						
 			 		}else{
-			 			if($band==0&&$parametros["nivel"]){
+			 			if($band==0&&$parametros["nivel"]&&!$this->DBC('SELECT * FROM permisos WHERE cargo_id='.$cargoid.' AND area_id='.$areaid.' AND tipo_instancia_id='.$tipo_instanciaid.' AND nivel!=0',0)){
 			 				$this->DBC('INSERT INTO permisos SET cargo_id='.$cargoid.' , area_id='.$areaid.' , tipo_instancia_id='.$tipo_instanciaid.' , permiso="" ,nivel='.$parametros["nivel"],1);
 			 				$band=1;
 			 			}
@@ -248,7 +249,7 @@ class modelo
 				if ($parametros["id"])
 					return $this->DBC('UPDATE '.$tipo.' SET nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\' WHERE id='.$parametros["id"],1);
 				else
-					return $this->DBC('INSERT INTO tipo_instancia SET logo=\''.$parametros["logo"].'\' , clasificacion=\''.$parametros["clasificacion"].'\' , nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\'',1);
+					return $this->DBC('INSERT INTO '.$tipo.' SET  nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\'',1);
 				break;
 		}
 	}
