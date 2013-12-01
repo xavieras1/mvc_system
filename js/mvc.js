@@ -85,7 +85,7 @@ function editar(boton) {
 }
 function guardar(boton,additional) {
   var current=$('.active').attr('href').substring(1);
-  var $data=eval('('+JSON.stringify(data.data)+')')[current];
+  // var $data=eval('('+JSON.stringify(data.data)+')')[current];
   var id="";
 
   if(boton.attr("class")==="save_permiso"){

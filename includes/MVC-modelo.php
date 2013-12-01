@@ -265,8 +265,13 @@ class modelo
 					return $this->DBC('INSERT INTO instancia_permanencia SET nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\' , fecha_creacion=\''.$parametros["fecha_creacion"].'\' , telefono=\''.$parametros["telefono"].'\' , direccion=\''.$parametros["direccion"].'\'',1);
 				break;
 			default:
-				if ($parametros["id"])
-					return $this->DBC('UPDATE '.$tipo.' SET nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\' WHERE id='.$parametros["id"],1);
+				if ($parametros["id"]){
+					/*******************DB*********************/
+					$insert=$this->DBC('UPDATE '.$tipo.' SET nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\' WHERE id='.$parametros["id"],1);
+					/*************GLOBAL SESSION***************/
+					array_push($_SESSION["current_cargo"]["data"][$tipo], array('id'=>$insert["id"],"nombre"=>$parametros["nombre"],"descripcion"=>$parametros["descripcion"]));
+					return $insert;
+				}
 				else
 					return $this->DBC('INSERT INTO '.$tipo.' SET  nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\'',1);
           		break;
@@ -314,7 +319,7 @@ class modelo
 			mysql_free_result($result);
 			return $rows;
 		}
-		return  array('id' => mysql_insert_id());
+		return  array('id' => mysql_insert_id());//id de editar
 	}
 }
 ?>
