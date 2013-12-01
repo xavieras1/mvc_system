@@ -268,7 +268,7 @@ class modelo
 			default:
 				if ($parametros["id"]){
 					/************GLOBAL SESSION***************/
-					$_SESSION["current_cargo"]["data"][$tipo][$this.getIndexByIndex($_SESSION["current_cargo"]["data"][$tipo],$parametros["id"])]=array('id'=>$parametros["id"],"nombre"=>$parametros["nombre"],"descripcion"=>$parametros["descripcion"]);
+					$_SESSION["current_cargo"]["data"][$tipo][$this->getIndexByIndex($_SESSION["current_cargo"]["data"][$tipo],$parametros["id"])]=array('id'=>$parametros["id"],"nombre"=>$parametros["nombre"],"descripcion"=>$parametros["descripcion"]);
 					/*******************DB*********************/
 					return $this->DBC('UPDATE '.$tipo.' SET nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\' WHERE id='.$parametros["id"],1);
 				}
@@ -277,6 +277,7 @@ class modelo
 					$insert=$this->DBC('INSERT INTO '.$tipo.' SET  nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\'',1);
 					/************GLOBAL SESSION***************/
 					array_push($_SESSION["current_cargo"]["data"][$tipo], array('id'=>$insert["id"],"nombre"=>$parametros["nombre"],"descripcion"=>$parametros["descripcion"]));
+					file_put_contents("test.txt", json_encode($_SESSION["current_cargo"]["data"][$tipo]));//escribe en un archivo
 					return $insert;
 				}
           		break;
@@ -285,7 +286,7 @@ class modelo
 
 	public function delete($tipo, $id){
 		session_start();
-    unset($_SESSION["current_cargo"]["data"][$tipo][$this.getIndexByIndex($_SESSION["current_cargo"]["data"][$tipo],$id)]);
+    unset($_SESSION["current_cargo"]["data"][$tipo][$this->getIndexByIndex($_SESSION["current_cargo"]["data"][$tipo],$id)]);
 		switch ($tipo) {
 			case 'tipos_instancia':
 				return $this->DBC('DELETE FROM tipo_instancia WHERE id='.$id,1);
