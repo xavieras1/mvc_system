@@ -247,12 +247,22 @@ class modelo
 		           return $this->DBC('INSERT INTO persona SET foto=\''.$parametros["foto"].'\' , nombre=\''.$parametros["nombre"].'\', apellido=\''.$parametros["apellido"].'\' , ciudad=\''.$parametros["ciudad"].'\' , sexo=\''.$parametros["sexo"].'\', edad=\''.$parametros["edad"].'\' , nacimiento=\''.$parametros["nacimiento"].'\' , domicilio=\''.$parametros["domicilio"].'\', estudio=\''.$parametros["estudio"].'\' , institucion=\''.$parametros["institucion"].'\' , telefono=\''.$parametros["telefono"].'\', claro=\''.$parametros["claro"].'\' , movi=\''.$parametros["movi"].'\' , pin=\''.$parametros["pin"].'\', email=\''.$parametros["email"].'\' , fb=\''.$parametros["fb"].'\' , tw=\''.$parametros["tw"].'\', user=\''.$parametros["user"].'\' , pass=\''.$parametros["pass"].'\'',1);
 		     	break;
 			case 'tipos_instancia':
-				if ($parametros["id"])
+				if ($parametros["id"]){
+					/************GLOBAL SESSION***************/
+					$_SESSION["current_cargo"]["data"][$tipos_instancia][$this->getIndexByIndex($_SESSION["current_cargo"]["data"][$tipos_instancia],$parametros["id"])]=array('id'=>$parametros["id"],"clasificacion"=>$parametros["clasificacion"],"nombre"=>$parametros["nombre"],"descripcion"=>$parametros["descripcion"],"logo"=>$parametros["logo"]);
+					file_put_contents("test.txt", json_encode($_SESSION["current_cargo"]["data"][$tipos_instancia]));//escribe en un archivo
+					/*******************DB*********************/
 					return $this->DBC('UPDATE tipo_instancia SET logo=\''.$parametros["logo"].'\' , clasificacion=\''.$parametros["clasificacion"].'\' , nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\' WHERE id='.$parametros["id"],1);
-				else				
-					return $this->DBC('INSERT INTO tipo_instancia SET logo=\''.$parametros["logo"].'\' , clasificacion=\''.$parametros["clasificacion"].'\', nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\'',1);
+				}
+				else
+					/*******************DB*********************/
+					$insert=$this->DBC('INSERT INTO tipo_instancia SET logo=\''.$parametros["logo"].'\' , clasificacion=\''.$parametros["clasificacion"].'\', nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\'',1);
+					/************GLOBAL SESSION***************/
+					array_push($_SESSION["current_cargo"]["data"][$tipos_instancia], array('id'=>$insert["id"],"clasificacion"=>$parametros["clasificacion"],"nombre"=>$parametros["nombre"],"descripcion"=>$parametros["descripcion"],"logo"=>$parametros["logo"]));
+					file_put_contents("test.txt", json_encode($_SESSION["current_cargo"]["data"][$tipos_instancia]));
+					return $insert;
 				break;
-			case 'nucleo'://check the two tables' fields
+			case 'nucleo':
 				if ($parametros["id"])
 					return $this->DBC('UPDATE persona_cargo_area_instancia SET persona_id=\''.$parametros["id_persona"].'\' ,cargo_id=\''.$parametros["id_cargo"].'\' , area_id=\''.$parametros["id_area"].'\' , fecha_inicio=\''.$parametros["fecha_inicio"].'\' WHERE id='.$parametros["id"],1);
 						
@@ -269,6 +279,7 @@ class modelo
 				if ($parametros["id"]){
 					/************GLOBAL SESSION***************/
 					$_SESSION["current_cargo"]["data"][$tipo][$this->getIndexByIndex($_SESSION["current_cargo"]["data"][$tipo],$parametros["id"])]=array('id'=>$parametros["id"],"nombre"=>$parametros["nombre"],"descripcion"=>$parametros["descripcion"]);
+					file_put_contents("test.txt", json_encode($_SESSION["current_cargo"]["data"][$tipo]));//escribe en un archivo
 					/*******************DB*********************/
 					return $this->DBC('UPDATE '.$tipo.' SET nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\' WHERE id='.$parametros["id"],1);
 				}
