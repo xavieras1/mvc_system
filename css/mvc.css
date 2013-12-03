@@ -149,6 +149,8 @@ ul.roles li a {
 	float: left;
 	width: 73%;
 	min-height: 450px;
+	max-height: 90%;
+	height: 90%;
 	background-color: #fff;
 	margin-left: 25px;
 	margin-top: 25px;
@@ -235,6 +237,7 @@ input[type="button"]:active, input[type="button"]:hover:active{
 }
 #content{
 	overflow: auto;
+	max-height: 416px;
 }
 /*ASOCIACIONES*/
 table{

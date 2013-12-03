@@ -221,6 +221,7 @@ function guardar(boton,additional) {
         //window.location.href = "http://stackoverflow.com";//la intencion es llamar a una nueva pagina para editar un permiso
       }else if(current==="tipos_instancia"){
         //table+='<td><input name="logo" type="file"></td>';}
+        /**********************FRONT END**********************/
         var logo=boton.parent().parent().children(":nth-child(1)").children("input").val();
         boton.parent().parent().children(":nth-child(1)").html(logo);
         var clasificacion=boton.parent().parent().children(":nth-child(2)").children("input").val();
@@ -230,15 +231,25 @@ function guardar(boton,additional) {
         var descripcion=boton.parent().parent().children(":nth-child(4)").children("input").val();
         boton.parent().parent().children(":nth-child(4)").html(descripcion);
         boton.parent().parent().attr("class","table_row "+current+json.id);
+        boton.parent().parent().attr("id",current+json.id);
 
+        /*******************LOCAL SESSION********************/
         var nuevo={};
-        nuevo['id']=json.id;
         nuevo['logo']=logo;
         nuevo['clasificacion']=clasificacion;
         nuevo['nombre']=nombre;
         nuevo['descripcion']=descripcion;
+        if(json.id==0){
+          nuevo['id']=id;
+          data.data[current][getIndexByIndex(data.data[current],id)]=nuevo;
+        }else{
+          nuevo['id']=json.id;
+          data.data[current].push(nuevo);
+        }
+        // console.log(data.data[current]);
 
       }else if(current==="centros"){
+        /**********************FRONT END**********************/
         var nombre=boton.parent().parent().children(":nth-child(1)").children("input").val();
         boton.parent().parent().children(":nth-child(1)").html(nombre);
         var descripcion=boton.parent().parent().children(":nth-child(2)").children("input").val();
@@ -251,13 +262,22 @@ function guardar(boton,additional) {
         boton.parent().parent().children(":nth-child(5)").html(direccion);
         boton.parent().parent().attr("class","table_row "+current+json.id);
 
+        /*******************LOCAL SESSION********************/
+        console.log(data.data[current]);
         var nuevo={};
-        nuevo['id']=json.id;
         nuevo['nombre']=nombre;
         nuevo['descripcion']=descripcion;
         nuevo['fecha_creacion']=fecha_creacion;
         nuevo['telefono']=telefono;
         nuevo['direccion']=direccion;
+        if(json.id==0){
+          nuevo['id']=id;
+          data.data[current][getIndexByIndex(data.data[current],id)]=nuevo;
+        }else{
+          nuevo['id']=json.id;
+          data.data[current].push(nuevo);
+        }
+        console.log(data.data[current]);
       }else if(current==="nucleo"){
         var persona_id=boton.parent().parent().children(":nth-child(1)").children("input").val();
         boton.parent().parent().children(":nth-child(1)").html(persona_id);
@@ -288,15 +308,13 @@ function guardar(boton,additional) {
 
         /*******************LOCAL SESSION********************/
         var nuevo={};
+        nuevo['nombre']=nombre;
+        nuevo['descripcion']=descripcion;
         if(json.id==0){
           nuevo['id']=id;
-          nuevo['nombre']=nombre;
-          nuevo['descripcion']=descripcion;
           data.data[current][getIndexByIndex(data.data[current],id)]=nuevo;
         }else{
           nuevo['id']=json.id;
-          nuevo['nombre']=nombre;
-          nuevo['descripcion']=descripcion;
           data.data[current].push(nuevo);
         }
         console.log(data.data[current]);
@@ -335,6 +353,7 @@ function eliminar(table,id){
   if (answer){
     var url="includes/api.php?request=eliminar&tipo="+table+"&id="+id;
     console.log("url: "+url);
+    /**********************ELIMINAR EN DB**********************/
     $.ajax({
       url: url,
       type: "GET",
@@ -344,14 +363,18 @@ function eliminar(table,id){
         alert(json.descriptionerror);
       }else{
         var trId= table + id;
+        /**********************FRONT END**********************/
         $('#' + trId).remove();
+        
+        /*******************LOCAL SESSION********************/
         data.data[table].splice(getIndexByIndex(data.data[table],id), 1);
+        console.log(data.data[table]);
       }
     });
   }
 }
 $(document).ready(function(){
-  /*************************************HEADER**************************************/
+  /*************************HEADER*****************************/
   $('ul.roles').hide();
   $('#cuentas,#saludo').click(function(){
     $('ul.roles').is(":visible")? $('ul.roles').hide():$('ul.roles').show();
