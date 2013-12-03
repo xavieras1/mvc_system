@@ -249,8 +249,8 @@ class modelo
 			case 'tipos_instancia':
 				if ($parametros["id"]){
 					/************GLOBAL SESSION***************/
-					$_SESSION["current_cargo"]["data"][$tipos_instancia][$this->getIndexByIndex($_SESSION["current_cargo"]["data"][$tipos_instancia],$parametros["id"])]=array('id'=>$parametros["id"],"clasificacion"=>$parametros["clasificacion"],"nombre"=>$parametros["nombre"],"descripcion"=>$parametros["descripcion"],"logo"=>$parametros["logo"]);
-					file_put_contents("test.txt", json_encode($_SESSION["current_cargo"]["data"][$tipos_instancia]));//escribe en un archivo
+					$_SESSION["current_cargo"]["data"][$tipo][$this->getIndexByIndex($_SESSION["current_cargo"]["data"][$tipo],$parametros["id"])]=array('id'=>$parametros["id"],"clasificacion"=>$parametros["clasificacion"],"nombre"=>$parametros["nombre"],"descripcion"=>$parametros["descripcion"],"logo"=>$parametros["logo"]);
+					file_put_contents("test.txt", json_encode($_SESSION["current_cargo"]["data"][$tipo]));
 					/*******************DB*********************/
 					return $this->DBC('UPDATE tipo_instancia SET logo=\''.$parametros["logo"].'\' , clasificacion=\''.$parametros["clasificacion"].'\' , nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\' WHERE id='.$parametros["id"],1);
 				}
@@ -258,8 +258,8 @@ class modelo
 					/*******************DB*********************/
 					$insert=$this->DBC('INSERT INTO tipo_instancia SET logo=\''.$parametros["logo"].'\' , clasificacion=\''.$parametros["clasificacion"].'\', nombre=\''.$parametros["nombre"].'\' , descripcion=\''.$parametros["descripcion"].'\'',1);
 					/************GLOBAL SESSION***************/
-					array_push($_SESSION["current_cargo"]["data"][$tipos_instancia], array('id'=>$insert["id"],"clasificacion"=>$parametros["clasificacion"],"nombre"=>$parametros["nombre"],"descripcion"=>$parametros["descripcion"],"logo"=>$parametros["logo"]));
-					file_put_contents("test.txt", json_encode($_SESSION["current_cargo"]["data"][$tipos_instancia]));
+					array_push($_SESSION["current_cargo"]["data"][$tipo], array('id'=>$insert["id"],"clasificacion"=>$parametros["clasificacion"],"nombre"=>$parametros["nombre"],"descripcion"=>$parametros["descripcion"],"logo"=>$parametros["logo"]));
+					file_put_contents("test.txt", json_encode($_SESSION["current_cargo"]["data"][$tipo]));
 					return $insert;
 				break;
 			case 'nucleo':
